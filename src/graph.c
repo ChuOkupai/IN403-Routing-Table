@@ -1,7 +1,7 @@
 #include "graph.h"
 #include "node.h"
 
-Graph*	newGraph(uint16_t size)
+Graph*	newGraph(uint8_t size)
 {
 	
 }

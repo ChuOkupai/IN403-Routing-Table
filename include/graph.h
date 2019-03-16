@@ -4,11 +4,11 @@
 typedef struct s_Graph Graph;
 struct s_Graph
 {
-	uint16_t	size;
+	uint8_t	size;
 	Node		**table;
 };
 
-Graph*	newGraph(uint16_t size);
+Graph*	newGraph(uint8_t size);
 
 void	insertNode(Graph *g, uint8_t index);
 
