@@ -1,6 +1,8 @@
 #ifndef _NODE_H
 # define _NODE_H
 
+#include <stdint.h>
+
 typedef struct s_Node Node;
 struct s_Node
 {
