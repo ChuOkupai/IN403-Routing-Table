@@ -1,22 +1,30 @@
+#include <errno.h>
 #include <stdlib.h>
 #include "graph.h"
 #include "node.h"
 
+#define _return_malloc_error() { destroyGraph(g); errno = ENOMEM; return NULL; }
+
 Graph*	newGraph(uint8_t size)
 {
 	Graph *g = (Graph*)malloc(sizeof(Graph));
-	if(g!= NULL)
-	{
-		g->size = size;
-		g->table = (Node**)calloc(size, sizeof(Node*));
+	
+	if (! g)
 		return g;
-		
+	g->size = size;
+	g->table = (Node**)calloc(size, sizeof(Node*));
+	if (! g->table)
+		_return_malloc_error();
+	for (uint8_t i = 0; i < size; i++)
+	{
+		g->table[i] = newNode(i, 0);
+		if (! g->table[i])
+			_return_malloc_error();
 	}
-	return NULL;
+	return g;
 }
 
-
-void	linkNode(Graph *g, uint8_t index1, uint8_t weight1, uint8_t index2, uint8_t weight2)
+/*void	linkNode(Graph *g, uint8_t index1, uint8_t weight1, uint8_t index2, uint8_t weight2)
 {
 	if(!g) return ;
 	Node* n1 = g->table[index1];
@@ -43,25 +51,28 @@ void	linkNode(Graph *g, uint8_t index1, uint8_t weight1, uint8_t index2, uint8_t
 		}
 		n2prec->next = newNode(index1, weight2);
 	}
-}
+}*/
 
 void	destroyGraph(Graph *g)
 {
-	Node* n, nn;
-	
-	if(!g) return ;
-	for(int i=0;i<g->size; i++)
+	if (! g)
+		return;
+	else if (! g->table)
 	{
-		if(g->table[i] != NULL)
+		free(g);
+		return;
+	}
+	Node *next;
+	
+	for (uint8_t i = 0; i < g->size; i++)
+	{
+		if (! g->table[i])
+			continue;
+		while (g->table[i])
 		{
-			n = g->table[i];
-			nn = n->next;
-			while(n != NULL)
-			{
-				free(n);
-				n = nn;
-				nn = n->next;  
-			}
+			next = g->table[i]->next;
+			free(g->table[i]);
+			g->table[i] = next;
 		}
 	}
 	free(g->table);

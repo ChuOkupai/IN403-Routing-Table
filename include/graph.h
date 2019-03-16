@@ -2,6 +2,7 @@
 # define _GRAPH_H
 
 #include <stdint.h>
+#include "node.h"
 
 typedef struct s_Graph Graph;
 struct s_Graph
