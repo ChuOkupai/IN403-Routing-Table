@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "graph.h"
 #include "node.h"
 
@@ -14,6 +15,7 @@ Graph*	newGraph(uint8_t size)
 	return NULL;
 }
 
+
 void	linkNode(Graph *g, uint8_t index1, uint8_t weight1, uint8_t index2, uint8_t weight2)
 {
 	if(!g) return ;
@@ -23,7 +25,7 @@ void	linkNode(Graph *g, uint8_t index1, uint8_t weight1, uint8_t index2, uint8_t
 	if(!n1) n1 = newNode(index2, weight1);
 	else
 	{
-		while(n1 != NULL && n->index < n1->index)
+		while(n1 != NULL)
 		{
 			n1prec = n1;
 			n1 = n1->next;
@@ -34,12 +36,12 @@ void	linkNode(Graph *g, uint8_t index1, uint8_t weight1, uint8_t index2, uint8_t
 	if(!n2) n2 = newNode(index1, weight2);
 	else
 	{
-		while(n1 != NULL && n->index < n2->index)
+		while(n1 != NULL)
 		{
 			n2prec = n2;
 			n2 = n2->next;
 		}
-		n1prec->next = newNode(index1, weight2);
+		n2prec->next = newNode(index1, weight2);
 	}
 }
 
@@ -50,13 +52,13 @@ void	destroyGraph(Graph *g)
 	if(!g) return ;
 	for(int i=0;i<g->size; i++)
 	{
-		if(!g->table[i])
+		if(g->table[i] != NULL)
 		{
 			n = g->table[i];
 			nn = n->next;
 			while(n != NULL)
 			{
-				free(n)
+				free(n);
 				n = nn;
 				nn = n->next;  
 			}
