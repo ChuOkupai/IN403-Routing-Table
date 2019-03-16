@@ -4,6 +4,6 @@
 
 int	main()
 {
-	
+	//Graph *G = newGraph(100);
 	return 0;
 }
