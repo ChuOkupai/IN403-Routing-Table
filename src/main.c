@@ -1,9 +1,8 @@
-#include <stdint.h>
-#include <stdio.h>
-#include "node.h"
+#include "network.h"
 
 int	main()
 {
-	//Graph *G = newGraph(100);
+	Graph *G = createNetwork();
+	destroyGraph(G);
 	return 0;
 }
