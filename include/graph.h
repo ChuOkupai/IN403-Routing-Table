@@ -1,25 +1,30 @@
 #ifndef _GRAPH_H
-# define _GRAPH_H
+#define _GRAPH_H
 
 #include <stdint.h>
 
-typedef struct s_Graph Graph;
-struct s_Graph
+struct node
 {
-	uint8_t	n;
-	uint8_t	**m;
+	 int id;
+	 int weight;
+	 struct node* next;
 };
+typedef struct node* Node;
 
-// Crée un graphe de taille n
-Graph*	newGraph(uint8_t n);
+struct graph
+{
+	int nbNode;
+	Node* tab;
+};
+typedef struct graph* Graph;
 
-// Détruit un graphe
-void	destroyGraph(Graph *G);
+Node newNode(int id, int weight);
+int alreadyLinked(Graph g, int id1, int id2);
+void linkNode(Graph g, int id1, int id2, int weight);
+Graph graphInit(int n);
+void graphDestroy(Graph g);
+void graphDraw(Graph g);
 
-// Ajoute une arête entre 2 sommets du graphe
-#define LINK(G, X, Y, WEIGHT) { ((Graph*)G)->m[x][y] = WEIGHT; (Graph*)G)->m[y][x] = WEIGHT; }
-
-// Supprime une arête entre 2 sommets du graphe
-#define UNLINK(G, X, Y) { ((Graph*)G)->m[x][y] = 0; (Graph*)G)->m[y][x] = 0; }
+#define LINK(g,id1,id2,w) {linkNode(g, id1, id2, w); linkNode(g, id2, id1, w);}
 
 #endif

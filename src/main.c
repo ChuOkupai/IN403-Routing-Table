@@ -1,8 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "network.h"
 
-int	main()
+
+int main()
 {
-	Graph *G = createNetwork();
-	destroyGraph(G);
+	Graph g = createNetwork(28);
+	graphDraw(g);
+	graphDestroy(g);
 	return 0;
 }
