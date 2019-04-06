@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include "error.h"
 #include "graph.h"
@@ -91,17 +90,20 @@ void graphDestroy(Graph g)
 
 void graphDraw(Graph g)
 {
-	int i;
-	Node ncurr;
-	printf("Graphe avec %d sommets \n",g->nbNode);
-	for(i = 0; i<g->nbNode; i++){
-		printf("Voisins de %d: ",i);
-		ncurr = g->tab[i];
-		while(ncurr != NULL)
+	Node n;
+	
+	for (int i = 0; i < g->nbNode; i++)
+	{
+		n = g->tab[i];
+		if (! n)
+			continue;
+		printf("%d:", i);
+		while (n)
 		{
-			printf("%d(%d)",ncurr->id, ncurr->weight);
-			ncurr = ncurr->next;
+			printf("%2d(%2d)", n->id, n->weight);
+			if ((n = n->next))
+				putchar(',');
 		}
-		printf("\n");
+		putchar('\n');
 	}
 }

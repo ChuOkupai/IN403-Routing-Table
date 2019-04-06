@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include "network.h"
@@ -11,30 +9,19 @@
 #define START_TIER3 END_TIER2
 #define END_TIER3 100
 
-int randi(int min, int max)
+Graph	createNetwork()
 {
-	// on considere min et max positifs
-	return rand()%(max - min + 1) + min;
-}
-
-Graph	createNetwork(int n)
-{
-	int nbTier[72];
+	//int nbTier[72];
 	int i, j;
-	int n1,n2;
-	Graph g = graphInit(n);
+	//int n1,n2;
+	Graph g = graphInit(100);
 	srand(time(NULL));
 	
 	//Tier 1
-	for(i=START_TIER1;i<END_TIER1;i++)
-	{
-		//Liaison au TIER1 
-		for(j=START_TIER1;j<END_TIER1;j++)
-		{
-			if(!alreadyLinked(g, i, j) && randi(1,4) > 1 && i!=j) //si dans g i n'est pas lié à j et ...
-				LINK(g,i,j,randi(5,10));
-		}
-	}
+	for (i = 0; i < END_TIER1 - 1; i++)
+		for (j = i + 1; j < END_TIER1; j++)
+			if (rand() % 4)
+				LINK(g,i,j,rand() % 6 + 5);
 	
 	/* C'EST BUGGEEEEEEEEEEE !
 	//TIER2
@@ -66,7 +53,6 @@ Graph	createNetwork(int n)
 			}
 		}
 	}
-	/*
 	//TIER3
 	memset(nbTier, 0, sizeof(nbTier));
 	
