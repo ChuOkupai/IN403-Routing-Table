@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 #include "network.h"
 
@@ -98,26 +99,21 @@ void search_vertex(Graph g, int s, int *color, int *father)
 
 int depthFirstSearch(Graph g)
 {
-	int i;
-	int hasFather = 1;
-	int *color = calloc(g->nbNode, sizeof(int)); // 0 est blanc, 1 gris et 2 noir
-	int *father = calloc(g->nbNode, sizeof(int));
+	if(!g) return 0;
+	int i, hasFather = 1;
+	int *color = calloc(g->nbNode, sizeof(int));
+	int *father = (int*)malloc(g->nbNode*sizeof(int));
+	for(i=0;i<g->nbNode;i++)
+		father[i] = -1;
 	
 	for(i=0; i<g->nbNode; i++)
-	{
 		if(color[i] == 0)
 			search_vertex(g,i,color,father);
-	}
-	
-	i=0;
-	while(i<g->nbNode && hasFather)
-	{
-		if(father[i] == 0) hasFather = 0;
-		i++;
-	}
-	
+
+	for(i=1;i<g->nbNode && hasFather;i++)
+		if(father[i] == -1) hasFather = 0;
+
 	free(color);
 	free(father);
 	return hasFather;
 }
-
