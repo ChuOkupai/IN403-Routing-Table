@@ -3,27 +3,25 @@
 
 #include <stdint.h>
 
-struct node
+typedef struct node
 {
 	 int id;
 	 int weight;
 	 struct node* next;
-};
-typedef struct node* Node;
+}Node;
 
-struct graph
+typedef struct graph
 {
 	int nbNode;
-	Node* tab;
-};
-typedef struct graph* Graph;
+	Node** tab;
+}Graph;
 
-Node newNode(int id, int weight);
-int alreadyLinked(Graph g, int id1, int id2);
-void linkNode(Graph g, int id1, int id2, int weight);
-Graph graphInit(int n);
-void graphDestroy(Graph g);
-void graphDraw(Graph g);
+Node *newNode(int id, int weight);
+int alreadyLinked(Graph *g, int id1, int id2);
+void linkNode(Graph *g, int id1, int id2, int weight);
+Graph *graphInit(int n);
+void graphDestroy(Graph *g);
+void graphDraw(Graph *g);
 
 #define LINK(g,id1,id2,w) {linkNode(g, id1, id2, w); linkNode(g, id2, id1, w);}
 

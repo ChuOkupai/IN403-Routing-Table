@@ -2,9 +2,9 @@
 #include "error.h"
 #include "graph.h"
 
-Node newNode(int id, int weight)
+Node *newNode(int id, int weight)
 {
-	Node n = (Node)malloc(sizeof(struct node));
+	Node *n = (Node*)malloc(sizeof(struct node));
 	if(!n) ERROR_EXIT();
 	n->id = id;
 	n->weight = weight;
@@ -12,10 +12,10 @@ Node newNode(int id, int weight)
 	return n;
 }
 
-int alreadyLinked(Graph g, int id1, int id2)
+int alreadyLinked(Graph *g, int id1, int id2)
 {
 	int found = 0;
-	Node ncurr = g->tab[id1];
+	Node *ncurr = g->tab[id1];
 	while(ncurr != NULL && !found)
 	{
 		if(ncurr->id == id2){found = 1;}
@@ -24,9 +24,9 @@ int alreadyLinked(Graph g, int id1, int id2)
 	return found;
 }
 
-void linkNode(Graph g, int id1, int id2, int weight)
+void linkNode(Graph *g, int id1, int id2, int weight)
 {
-	Node nnew, ncurr, nprev;
+	Node *nnew, *ncurr, *nprev;
 	
 	if(!g) ERROR_EXIT();
 	if(id1 < 0 || id1 >= g->nbNode || id2 < 0 || id2 >= g->nbNode)
@@ -57,21 +57,21 @@ void linkNode(Graph g, int id1, int id2, int weight)
 	}
 }
 
-Graph graphInit(int n)
+Graph *graphInit(int n)
 {
 	if(n <= 0){WARNING(EDOM);return NULL;}
-	Graph g = (Graph)malloc(sizeof(struct graph));
+	Graph *g = (Graph*)malloc(sizeof(struct graph));
 	if(!g) return NULL;
 	g->nbNode = n;
-	g->tab = (Node*)calloc(n, sizeof(struct node));
+	g->tab = (Node**)calloc(n, sizeof(struct node));
 	if(!(g->tab)){free(g); return NULL;}
 	return g;
 }
 
-void graphDestroy(Graph g)
+void graphDestroy(Graph *g)
 {
 	
-	Node ncurr,nnext;
+	Node *ncurr,*nnext;
 	for(int i=0; i<g->nbNode; i++)
 	{
 		ncurr = g->tab[i];
@@ -88,9 +88,9 @@ void graphDestroy(Graph g)
 	free(g);
 }
 
-void graphDraw(Graph g)
+void graphDraw(Graph *g)
 {
-	Node n;
+	Node *n;
 	
 	for (int i = 0; i < g->nbNode; i++)
 	{
