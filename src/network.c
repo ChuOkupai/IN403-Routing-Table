@@ -10,7 +10,7 @@
 #define T3_START T2_END
 #define T3_END 100
 
-Graph	createNetwork()
+Graph*	createNetwork()
 {
 	//int nbTier[72];
 	int i, j;
@@ -85,7 +85,7 @@ Graph	createNetwork()
 void search_vertex(Graph *g, int s, int *color, int *father)
 {
 	color[s] = 1;
-	Node n = g->tab[s];
+	Node *n = g->tab[s];
 	while(n != NULL)
 	{
 		if(color[n->id] == 0)
