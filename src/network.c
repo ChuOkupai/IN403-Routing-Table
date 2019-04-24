@@ -12,73 +12,42 @@
 
 Graph*	createNetwork()
 {
-	//int nbTier[72];
-	int i, j;
-	//int n1,n2;
+	int d[20], i, j, k, l, m, n;
 	Graph *g = graphInit(100);
 	srand(time(NULL));
 	
-	//Tier 1
-	for (i = 0; i < T1_END - 1; i++)
+	// Tier 1
+	for (i = 0; i < T1_END; i++)
 		for (j = i + 1; j < T1_END; j++)
 			if (rand() % 4)
-				LINK(g,i,j,rand() % 6 + 5);
-	
-	/* C'EST BUGGEEEEEEEEEEE !
-	//TIER2
-	memset(nbTier, 0, sizeof(nbTier));
-	
-	for(i=T2_START;i<T2_END;i++)
+				LINK(g, i, j, rand() % 6 + 5);
+	// Tier 2
+	m = 0;
+	memset(d, 0, sizeof(d));
+	for (i = T2_START; i < T2_END; i++)
 	{
-		//Liaison au TIER1
-		n2 = n1 = randi(T1_START, T1_END - 1);
-		LINK(g,i,n1,randi(10,20));
-		if(randi(1,2) == 2)
+		// Liaison au Tier 1
+		j = 0;
+		k = rand() % 2 + 1;
+		while (j < k)
 		{
-			while(n1 == n2)
-				n2 = randi(T1_START, T1_END - 1);
-			LINK(g,i,n2,randi(10,20));
+			n = rand() % T1_END;
+			if (alreadyLinked(g, i, n))
+				continue;
+			LINK(g, i, n, rand() % 11 + 10);
+			j++;
 		}
 		
-		
-		//Liaison au TIER2 FAUX
-		j = randi(2,3);
-		while(nbTier[i - T2_START] < j)
+		// Liaison au Tier 2
+		j = 0;
+		k = rand() % 2 + 2 - d[i - T2_START];
+		while (j < k)
 		{
-			n1 = randi(T2_START, T2_END - 1);
-			if(!alreadyLinked(g,i,n1) && nbTier[n1 - T2_START] < 3 && n1 != i)
-			{
-				LINK(g,i,n1,randi(10,20));
-				nbTier[i - T2_START]++;
-				nbTier[n1 - T2_START]++;
-			}
+
+			j++;
 		}
 	}
-	//TIER3
-	memset(nbTier, 0, sizeof(nbTier));
-	
-	for(i=T3_START;i<T3_END; i++)
-	{
-		//Liasion au TIER2
-		n2 = n1 = randi(T2_START, T2_END - 1);
-		LINK(g,i,n1,randi(15,50));
-		while(n1 == n2)
-			n2 = randi(T2_START, T2_END - 1);
-		LINK(g,i,n2,randi(15,50));
-		
-		//Liaison au TIER3 FAUX
-		n1 = randi(T3_START,T3_END-1);
-		while(nbTier[i - T3_START] < 1 )
-		{
-			if(!alreadyLinked(g,i,n1) && nbTier[n1 - T3_START] < 1 && n1 != i)
-			{
-				nbTier[i - T3_START]++;
-				nbTier[n1 - T3_START]++;
-			}
-		}
-		LINK(g,i,randi(T3_START,T3_END-1),randi(15,50));
-	}
-	*/
+	// Tier 3
 	return g;
 }
 

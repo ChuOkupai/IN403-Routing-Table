@@ -8,13 +8,13 @@ typedef struct node
 	 int id;
 	 int weight;
 	 struct node* next;
-}Node;
+}	Node;
 
 typedef struct graph
 {
 	int nbNode;
 	Node** tab;
-}Graph;
+}	Graph;
 
 Node *newNode(int id, int weight);
 int alreadyLinked(Graph *g, int id1, int id2);
