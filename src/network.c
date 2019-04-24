@@ -3,24 +3,24 @@
 #include <time.h>
 #include "network.h"
 
-#define START_TIER1 0
-#define END_TIER1 8
-#define START_TIER2 END_TIER1
-#define END_TIER2 28
-#define START_TIER3 END_TIER2
-#define END_TIER3 100
+#define T1_START 0
+#define T1_END 8
+#define T2_START T1_END
+#define T2_END 28
+#define T3_START T2_END
+#define T3_END 100
 
 Graph	createNetwork()
 {
 	//int nbTier[72];
 	int i, j;
 	//int n1,n2;
-	Graph g = graphInit(100);
+	Graph *g = graphInit(100);
 	srand(time(NULL));
 	
 	//Tier 1
-	for (i = 0; i < END_TIER1 - 1; i++)
-		for (j = i + 1; j < END_TIER1; j++)
+	for (i = 0; i < T1_END - 1; i++)
+		for (j = i + 1; j < T1_END; j++)
 			if (rand() % 4)
 				LINK(g,i,j,rand() % 6 + 5);
 	
@@ -28,61 +28,61 @@ Graph	createNetwork()
 	//TIER2
 	memset(nbTier, 0, sizeof(nbTier));
 	
-	for(i=START_TIER2;i<END_TIER2;i++)
+	for(i=T2_START;i<T2_END;i++)
 	{
 		//Liaison au TIER1
-		n2 = n1 = randi(START_TIER1, END_TIER1 - 1);
+		n2 = n1 = randi(T1_START, T1_END - 1);
 		LINK(g,i,n1,randi(10,20));
 		if(randi(1,2) == 2)
 		{
 			while(n1 == n2)
-				n2 = randi(START_TIER1, END_TIER1 - 1);
+				n2 = randi(T1_START, T1_END - 1);
 			LINK(g,i,n2,randi(10,20));
 		}
 		
 		
 		//Liaison au TIER2 FAUX
 		j = randi(2,3);
-		while(nbTier[i - START_TIER2] < j)
+		while(nbTier[i - T2_START] < j)
 		{
-			n1 = randi(START_TIER2, END_TIER2 - 1);
-			if(!alreadyLinked(g,i,n1) && nbTier[n1 - START_TIER2] < 3 && n1 != i)
+			n1 = randi(T2_START, T2_END - 1);
+			if(!alreadyLinked(g,i,n1) && nbTier[n1 - T2_START] < 3 && n1 != i)
 			{
 				LINK(g,i,n1,randi(10,20));
-				nbTier[i - START_TIER2]++;
-				nbTier[n1 - START_TIER2]++;
+				nbTier[i - T2_START]++;
+				nbTier[n1 - T2_START]++;
 			}
 		}
 	}
 	//TIER3
 	memset(nbTier, 0, sizeof(nbTier));
 	
-	for(i=START_TIER3;i<END_TIER3; i++)
+	for(i=T3_START;i<T3_END; i++)
 	{
 		//Liasion au TIER2
-		n2 = n1 = randi(START_TIER2, END_TIER2 - 1);
+		n2 = n1 = randi(T2_START, T2_END - 1);
 		LINK(g,i,n1,randi(15,50));
 		while(n1 == n2)
-			n2 = randi(START_TIER2, END_TIER2 - 1);
+			n2 = randi(T2_START, T2_END - 1);
 		LINK(g,i,n2,randi(15,50));
 		
 		//Liaison au TIER3 FAUX
-		n1 = randi(START_TIER3,END_TIER3-1);
-		while(nbTier[i - START_TIER3] < 1 )
+		n1 = randi(T3_START,T3_END-1);
+		while(nbTier[i - T3_START] < 1 )
 		{
-			if(!alreadyLinked(g,i,n1) && nbTier[n1 - START_TIER3] < 1 && n1 != i)
+			if(!alreadyLinked(g,i,n1) && nbTier[n1 - T3_START] < 1 && n1 != i)
 			{
-				nbTier[i - START_TIER3]++;
-				nbTier[n1 - START_TIER3]++;
+				nbTier[i - T3_START]++;
+				nbTier[n1 - T3_START]++;
 			}
 		}
-		LINK(g,i,randi(START_TIER3,END_TIER3-1),randi(15,50));
+		LINK(g,i,randi(T3_START,T3_END-1),randi(15,50));
 	}
 	*/
 	return g;
 }
 
-void search_vertex(Graph g, int s, int *color, int *father)
+void search_vertex(Graph *g, int s, int *color, int *father)
 {
 	color[s] = 1;
 	Node n = g->tab[s];
@@ -97,7 +97,7 @@ void search_vertex(Graph g, int s, int *color, int *father)
 	}
 }
 
-int depthFirstSearch(Graph g)
+int depthFirstSearch(Graph *g)
 {
 	if(!g) return 0;
 	int i, hasFather = 1;

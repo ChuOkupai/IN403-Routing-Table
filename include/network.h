@@ -2,5 +2,5 @@
 #define _NETWORK_H
 #include "graph.h"
 Graph	createNetwork();
-int depthFirstSearch(Graph g);
+int depthFirstSearch(Graph *g);
 #endif
