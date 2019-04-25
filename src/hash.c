@@ -9,33 +9,32 @@ void	display(int a, int b, int h)
 }
 
 // calcul le hash
-int	hash(int a, int b, int n)
+/** IMPORTANT: a != b **/
+int	hash(int a, int b)
 {
 	if (a > b) { int c = a; a = b; b = c; }
-	int i = a, s = 0;
-	while (i--)
-		s += --n;
-	return s + b - a - 1;
+	return (b - 1) * b / 2 + a;
 }
 
-// test le hash, renvoie 1 si le hash est correct pour n noeuds
+// test le hash pour n noeuds, renvoie 1 si correct
 int	check_hash(int n)
 {
-	int a, b, h, i;
-	for (a = 0, i = 0; a < n; a++)
+	int a, b, h, i, r = 1;
+	for (b = 1, i = 0; b < n && r; b++)
 	{
-		for (b = a + 1; b < n; b++)
+		for (a = 0; a < b; a++)
 		{
-			h = hash(a, b, n);
-			if (h != i)
+			h = hash(a, b);
+			if (i != h)
 			{
 				display(a, b, h);
-				return 0;
+				r = 0;
+				break;
 			}
 			i++;
 		}
 	}
-	return 1;
+	return r;
 }
 
 int main(int argc, char **argv)
