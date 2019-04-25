@@ -16,12 +16,10 @@ Node*	newNode(int id, int weight)
 // Crée un graphe
 Graph*	newGraph(int n)
 {
-	if(n <= 0){WARNING(EDOM);return NULL;}
-	Graph *g = (Graph*)malloc(sizeof(struct graph));
-	if(!g) return NULL;
+	Graph *g;
+	CHECK(g = (Graph*)malloc(sizeof(struct graph)));
+	CHECK(g->tab = (Node**)calloc(n, sizeof(struct node)));
 	g->size = n;
-	g->tab = (Node**)calloc(n, sizeof(struct node));
-	if(!(g->tab)){free(g); return NULL;}
 	return g;
 }
 
@@ -31,16 +29,20 @@ int	linked(Graph *g, int a, int b)
 	Node *n = g->tab[a];
 	int found = 0;
 	while (n && ! found)
-		(n->id == b) ? found = 1 : n = n->next;
+		if (n->id == b)
+			found = 1;
+		else
+			n = n->next;
 	return found;
 }
 
 // Crée un lien du sommet a vers b
 void	link(Graph *g, int a, int b, int weight)
 {
+	if (! g)
+		return;
 	Node *nnew, *ncurr, *nprev;
 	
-	if(!g) ERROR_EXIT();
 	if(a < 0 || a >= g->size || b < 0 || b >= g->size)
 	{
 		WARNING(EDOM);
@@ -70,7 +72,7 @@ void	link(Graph *g, int a, int b, int weight)
 }
 
 // Affichage du graphe (sur le terminal)
-void	graphDraw(Graph *g)
+void	drawGraph(Graph *g)
 {
 	Node *n;
 	
@@ -91,7 +93,7 @@ void	graphDraw(Graph *g)
 }
 
 // Libère la mémoire d'un graphe
-void	graphDestroy(Graph *g)
+void	destroyGraph(Graph *g)
 {
 	Node *ncurr,*nnext;
 	for(int i=0; i<g->size; i++)

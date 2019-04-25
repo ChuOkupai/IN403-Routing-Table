@@ -1,8 +1,6 @@
 #ifndef _GRAPH_H
 # define _GRAPH_H
 
-#include <stdint.h>
-
 typedef struct node
 {
 	int id;
@@ -32,6 +30,6 @@ void	drawGraph(Graph *g);
 void	destroyGraph(Graph *g);
 
 // Création d'un lien entre 2 sommets
-#define LINK(g, a, b, w) {linkNode(g, id1, id2, w); linkNode(g, id2, id1, w);}
+#define LINK(g, a, b, w) ({link(g, a, b, w); link(g, b, a, w);})
 
 #endif

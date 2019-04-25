@@ -15,6 +15,12 @@ network.o: src/network.c include/network.h include/graph.h graph.o
 rooting-table.out: src/main.c include/graph.h include/network.h graph.o network.o
 	$(CC) $(CFLAGS) $< -o $@ -I./include graph.o network.o
 
+hash.out: src/hash.c
+	$(CC) $(CFLAGS) $< -o $@
+
+hash: hash.out
+	./$<
+
 debug: rooting-table.out
 	valgrind ./$<
 

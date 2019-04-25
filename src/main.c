@@ -4,7 +4,7 @@
 int main()
 {
 	Graph *g = createNetwork();
-	graphDraw(g);
-	graphDestroy(g);
+	drawGraph(g);
+	destroyGraph(g);
 	return 0;
 }

@@ -27,7 +27,7 @@ void initTier2(Graph *g)
 		while (j < k)
 		{
 			n = rand() % T1_END;
-			if (alreadyLinked(g, i, n))
+			if (linked(g, i, n))
 				continue;
 			LINK(g, i, n, rand() % 11 + 10);
 			j++;
@@ -58,7 +58,7 @@ void initTier3(Graph *g)
 		while (j < 2)
 		{
 			n = rand() % (T2_END-T2_START) + T2_START;
-			if (alreadyLinked(g, i, n))
+			if (linked(g, i, n))
 				continue;
 			LINK(g, i, n, rand() % 36 + 15);
 			j++;
@@ -81,7 +81,7 @@ void initTier3(Graph *g)
 
 Graph*	createNetwork()
 {
-	Graph *g = graphInit(100);
+	Graph *g = newGraph(100);
 	srand(time(NULL));
 	
 	initTier2(g);
@@ -107,19 +107,20 @@ int depthFirstSearch(Graph *g)
 {
 	if(!g) return 0;
 	int i, hasFather = 1;
-	int *color = calloc(g->nbNode, sizeof(int));
-	int *father = (int*)malloc(g->nbNode*sizeof(int));
-	for(i=0;i<g->nbNode;i++)
+	int *color = calloc(g->size, sizeof(int));
+	int *father = (int*)malloc(g->size*sizeof(int));
+	for(i=0;i<g->size;i++)
 		father[i] = -1;
 	
-	for(i=0; i<g->nbNode; i++)
+	for(i=0; i<g->size; i++)
 		if(color[i] == 0)
 			search_vertex(g,i,color,father);
 
-	for(i=1;i<g->nbNode && hasFather;i++)
+	for(i=1;i<g->size && hasFather;i++)
 		if(father[i] == -1) hasFather = 0;
 
 	free(color);
 	free(father);
 	return hasFather;
 }
+
