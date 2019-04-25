@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <time.h>
 #include "network.h"
@@ -10,19 +11,20 @@
 #define T3_START T2_END
 #define T3_END 100
 
-Graph*	createNetwork()
+void initTier1(Graph *g)
 {
-	int d[20], i, j, k, l, m, n;
-	Graph *g = graphInit(100);
-	srand(time(NULL));
-	
-	// Tier 1
+	int i,j;
 	for (i = 0; i < T1_END; i++)
 		for (j = i + 1; j < T1_END; j++)
 			if (rand() % 4)
 				LINK(g, i, j, rand() % 6 + 5);
-	// Tier 2
-	m = 0;
+}
+
+
+void initTier2(Graph *g)
+{
+	int d[20], i, j, k, n;//l, m, n;
+	//m = 0;
 	memset(d, 0, sizeof(d));
 	for (i = T2_START; i < T2_END; i++)
 	{
@@ -38,6 +40,7 @@ Graph*	createNetwork()
 			j++;
 		}
 		
+		/*
 		// Liaison au Tier 2
 		j = 0;
 		k = rand() % 2 + 2 - d[i - T2_START];
@@ -46,8 +49,49 @@ Graph*	createNetwork()
 
 			j++;
 		}
+		* */
 	}
-	// Tier 3
+}
+
+void initTier3(Graph *g)
+{
+	int d[72], i, j, n;
+	memset(d, 0, sizeof(d));
+	
+	for (i = T3_START; i < T3_END; i++)
+	{
+		// Liaison au Tier 2
+		j = 0;
+		while (j < 2)
+		{
+			n = rand() % (T2_END-T2_START) + T2_START;
+			if (alreadyLinked(g, i, n))
+				continue;
+			LINK(g, i, n, rand() % 36 + 15);
+			j++;
+		}
+		
+		// Liaison au Tier 3
+		if(d[i-T3_START] == 0)
+		{
+			n = rand() % (T3_END-T3_START) + T3_START;
+			while(i == n || d[n-T3_START])
+			{
+				n = rand() % (T3_END-T3_START) + T3_START;
+			}
+			LINK(g,i,n,rand() % 36 + 15);
+			d[i-T3_START]++;
+			d[n-T3_START]++;
+		}
+	}
+}
+
+Graph*	createNetwork()
+{
+	Graph *g = graphInit(100);
+	srand(time(NULL));
+	
+	initTier2(g);
 	return g;
 }
 
