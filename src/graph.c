@@ -2,52 +2,64 @@
 #include "error.h"
 #include "graph.h"
 
-Node *newNode(int id, int weight)
+// Crée un noeud
+Node*	newNode(int id, int weight)
 {
-	Node *n = (Node*)malloc(sizeof(struct node));
-	if(!n) ERROR_EXIT();
+	Node *n;
+	CHECK(n = (Node*)malloc(sizeof(Node)));
 	n->id = id;
 	n->weight = weight;
 	n->next = NULL;
 	return n;
 }
 
-int alreadyLinked(Graph *g, int id1, int id2)
+// Crée un graphe
+Graph*	newGraph(int n)
 {
+	if(n <= 0){WARNING(EDOM);return NULL;}
+	Graph *g = (Graph*)malloc(sizeof(struct graph));
+	if(!g) return NULL;
+	g->size = n;
+	g->tab = (Node**)calloc(n, sizeof(struct node));
+	if(!(g->tab)){free(g); return NULL;}
+	return g;
+}
+
+// Vérifie si le lien du sommet a vers b existe
+int	linked(Graph *g, int a, int b)
+{
+	Node *n = g->tab[a];
 	int found = 0;
-	Node *ncurr = g->tab[id1];
-	while(ncurr != NULL && !found)
-	{
-		if(ncurr->id == id2){found = 1;}
-		else ncurr = ncurr->next;
-	}
+	while (n && ! found)
+		(n->id == b) ? found = 1 : n = n->next;
 	return found;
 }
 
-void linkNode(Graph *g, int id1, int id2, int weight)
+// Crée un lien du sommet a vers b
+void	link(Graph *g, int a, int b, int weight)
 {
 	Node *nnew, *ncurr, *nprev;
 	
 	if(!g) ERROR_EXIT();
-	if(id1 < 0 || id1 >= g->nbNode || id2 < 0 || id2 >= g->nbNode)
+	if(a < 0 || a >= g->size || b < 0 || b >= g->size)
 	{
 		WARNING(EDOM);
 		return ;
 	}
 	
-	nnew = newNode(id2, weight);
+	nnew = newNode(b, weight);
 	
-	if(!g->tab[id1]) g->tab[id1] = nnew;
-	else if(g->tab[id1] && g->tab[id1]->id > id2)
+	if(!g->tab[a]) g->tab[a] = nnew;
+	else if(g->tab[a] && g->tab[a]->id > b)
 	{
-		nnew->next = g->tab[id1];
-		g->tab[id1] = nnew;
+		nnew->next = g->tab[a];
+		g->tab[a] = nnew;
 	}
 	
 	else
 	{
-		ncurr = nprev = g->tab[id1];
-		while(ncurr != NULL && ncurr->id <= id2)
+		ncurr = nprev = g->tab[a];
+		while(ncurr != NULL && ncurr->id <= b)
 		{
 			nprev = ncurr;
 			ncurr = ncurr->next;
@@ -57,42 +69,12 @@ void linkNode(Graph *g, int id1, int id2, int weight)
 	}
 }
 
-Graph *graphInit(int n)
-{
-	if(n <= 0){WARNING(EDOM);return NULL;}
-	Graph *g = (Graph*)malloc(sizeof(struct graph));
-	if(!g) return NULL;
-	g->nbNode = n;
-	g->tab = (Node**)calloc(n, sizeof(struct node));
-	if(!(g->tab)){free(g); return NULL;}
-	return g;
-}
-
-void graphDestroy(Graph *g)
-{
-	
-	Node *ncurr,*nnext;
-	for(int i=0; i<g->nbNode; i++)
-	{
-		ncurr = g->tab[i];
-		if(ncurr != NULL) nnext = ncurr->next;
-		while(ncurr != NULL)
-		{
-			free(ncurr);
-			ncurr = nnext;
-			if(ncurr)
-				nnext = nnext->next;
-		}
-	}
-	free(g->tab);
-	free(g);
-}
-
-void graphDraw(Graph *g)
+// Affichage du graphe (sur le terminal)
+void	graphDraw(Graph *g)
 {
 	Node *n;
 	
-	for (int i = 0; i < g->nbNode; i++)
+	for (int i = 0; i < g->size; i++)
 	{
 		n = g->tab[i];
 		if (! n)
@@ -106,4 +88,24 @@ void graphDraw(Graph *g)
 		}
 		putchar('\n');
 	}
+}
+
+// Libère la mémoire d'un graphe
+void	graphDestroy(Graph *g)
+{
+	Node *ncurr,*nnext;
+	for(int i=0; i<g->size; i++)
+	{
+		ncurr = g->tab[i];
+		if(ncurr != NULL) nnext = ncurr->next;
+		while(ncurr != NULL)
+		{
+			free(ncurr);
+			ncurr = nnext;
+			if(ncurr)
+				nnext = nnext->next;
+		}
+	}
+	free(g->tab);
+	free(g);
 }
