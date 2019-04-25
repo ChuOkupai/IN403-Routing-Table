@@ -18,9 +18,6 @@ rooting-table.out: src/main.c include/graph.h include/network.h graph.o network.
 hash.out: src/hash.c
 	$(CC) $(CFLAGS) $< -o $@
 
-hash: hash.out
-	./$<
-
 debug: rooting-table.out
 	valgrind ./$<
 
