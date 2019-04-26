@@ -16,9 +16,12 @@ void initTier1(Graph *g)
 
 void initTier2(Graph *g)
 {
-	int d[20], i, j, k, n;//l, m, n;
-	//m = 0;
+	int d[20], i, j, k, n;
+
+	//init sommet degré 2 Tier 2
 	memset(d, 0, sizeof(d));
+	for(i=0;i<20;i++) d[i] = 2;
+	
 	for (i = T2_START; i < T2_END; i++)
 	{
 		// Liaison au Tier 1
@@ -32,17 +35,23 @@ void initTier2(Graph *g)
 			LINK(g, i, n, rand() % 11 + 10);
 			j++;
 		}
-		
-		/*
 		// Liaison au Tier 2
+		//NE MARCHE PAS DANS CERTAINS PETIT CAS
+		k = rand()%2 ? k+1 : k;
+		k -= d[i-T2_START];
+		
 		j = 0;
-		k = rand() % 2 + 2 - d[i - T2_START];
 		while (j < k)
 		{
-
-			j++;
+			n = rand() % (T2_END-T2_START) + T2_START;
+			if (i != n && d[n-T2_START] < 3 && d[i-T2_START] < 3 && !linked(g, i, n))
+			{
+				LINK(g, i, n, rand() % 11 + 10);
+				d[n-T2_START]++;
+				d[i-T2_START]++;
+				j++;
+			}
 		}
-		* */
 	}
 }
 
@@ -83,8 +92,9 @@ Graph*	createNetwork()
 {
 	Graph *g = newGraph(100);
 	srand(time(NULL));
-	
+	initTier1(g);
 	initTier2(g);
+	initTier3(g);
 	return g;
 }
 
