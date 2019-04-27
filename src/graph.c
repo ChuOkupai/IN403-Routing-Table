@@ -5,7 +5,7 @@
 #include "minheap.h"
 
 // Crée un noeud
-Node*	newNode(int id, int weight)
+Node*	newNode(const uint8_t id, const uint8_t weight)
 {
 	Node *n;
 	CHECK(n = (Node*)malloc(sizeof(Node)));
@@ -16,7 +16,7 @@ Node*	newNode(int id, int weight)
 }
 
 // Crée un graphe
-Graph*	newGraph(int n)
+Graph*	newGraph(const int n)
 {
 	Graph *g;
 	CHECK(g = (Graph*)malloc(sizeof(Graph)));
@@ -27,11 +27,11 @@ Graph*	newGraph(int n)
 
 // Vérifie si l'arête du sommet a vers b existe
 /// Renvoie son poids si oui, 0 sinon
-int	linked(Graph *g, int a, int b)
+int8_t	linked(Graph *g, const int a, const int b)
 {
 	if (! g) return 0;
 	Node *n = g->tab[a];
-	int w = 0;
+	uint8_t w = 0;
 	while (n && ! w)
 		if (n->id == b)
 			w = g->tab[a]->weight;
@@ -42,9 +42,9 @@ int	linked(Graph *g, int a, int b)
 
 // Crée une arête du sommet a vers b
 /// Le poids doit être supérieur à 0 !
-void	link(Graph *g, int a, int b, int weight)
+void	link(Graph *g, const int a, const int b, const int weight)
 {
-	if (! g || weight < 1 ||  a < 0 || a >= g->size || b < 0 || b >= g->size)
+	if (! g)
 		return;
 	Node *nnew, *ncurr, *nprev;
 	
@@ -71,7 +71,7 @@ void	link(Graph *g, int a, int b, int weight)
 
 // Recherche un sommet
 /// Fonction utilitaire pour le parcours en profondeur
-void searchVertex(Graph *g, int v, int *color, int *father)
+void searchVertex(const Graph *g, const int v, int *color, int *father)
 {
 	color[v] = 1;
 	Node *n = g->tab[v];
@@ -88,11 +88,10 @@ void searchVertex(Graph *g, int v, int *color, int *father)
 
 // Applique le parcours en profondeur pour vérifier la connexité du graphe
 /// Renvoie 1 si le graphe est connexe, 0 sinon
-int depthFirstSearch(Graph *g)
+int8_t depthFirstSearch(const Graph *g)
 {
 	if(!g) return 0;
-	int i, hasFather = 1;
-	int *color, *father;
+	int *color, *father, i, hasFather = 1;
 	
 	CHECK(color = calloc(g->size, sizeof(int)));
 	CHECK(father = (int*)malloc(g->size*sizeof(int)));
@@ -113,7 +112,7 @@ int depthFirstSearch(Graph *g)
 
 // Calcul des distances à partir du sommet a via l'algorithme de Dijkstra
 /// Les résultats sont stockés dans distance et parent qui doivent être initialisés de taille g->size !
-void	dijkstra(Graph* g, int *distance, int *parent, int a)
+void	dijkstra(const Graph* g, uint8_t *distance, int8_t *parent, const int a)
 {
 	if (! (distance && parent)) return;
 	MinHeap *h;
@@ -126,7 +125,7 @@ void	dijkstra(Graph* g, int *distance, int *parent, int a)
 	h->size = g->size;
 	for (v = 0; v < g->size; v++)
 	{
-		distance[v] = INT_MAX; // valeur infini
+		distance[v] = UCHAR_MAX; // valeur infini
 		h->tab[v] = newMinHeapNode(v, distance[v]);
 		h->position[v] = v;
 	}
@@ -146,7 +145,7 @@ void	dijkstra(Graph* g, int *distance, int *parent, int a)
 		{
 			v = n->id;
 			// Si la distance vers v n'est pas terminée et si la distance actuelle est plus courte que la précédente
-			if (inMinHeap(h, v) && distance[u] != INT_MAX && n->weight + distance[u] < distance[v])
+			if (inMinHeap(h, v) && distance[u] != UCHAR_MAX && n->weight + distance[u] < distance[v])
 			{
 				parent[v] = u;
 				distance[v] = distance[u] + n->weight;
@@ -158,13 +157,13 @@ void	dijkstra(Graph* g, int *distance, int *parent, int a)
 	destroyMinHeap(h);
 	// Correction des chemins impossibles
 	for (v = 0; v < g->size; v++)
-		if (distance[v] == INT_MAX)
-			parent[v] = INT_MAX; // reset valeur infini
+		if (distance[v] == UCHAR_MAX)
+			parent[v] = CHAR_MAX; // reset valeur infini
 }
 
 // Affiche le chemin
 /// Fonction utilitaire de displayDijkstraResults
-void	renderPath(int *parent, int v)
+void	renderPath(const int8_t *parent, const int v)
 {
 	if (! parent) return;
 	if (parent[v] == -1)
@@ -174,21 +173,22 @@ void	renderPath(int *parent, int v)
 }
 
 // Affiche le résultat de l'agorithme de Dijkstra
-void	displayShortestPaths(int *distance, int *parent, int a, int n)
+void	displayShortestPaths(const uint8_t *distance, const int8_t *parent, const int a, const int n)
 {
 	if (! (distance && parent) || parent[a] != -1) return;
+	int i;
 	// Affichage des distances et chemins
 	printf("Distances from %2d:\n", a);
-	for (int v = 0; v < n; v++)
+	for (i = 0; i < n; i++)
 	{
-		printf("%2d → ", v);
-		if (distance[v] != INT_MAX)
+		printf("%2d → ", i);
+		if (distance[i] != UCHAR_MAX)
 		{
-			printf("%2d", distance[v]);
-			if (v != a)
+			printf("%2u", distance[i]);
+			if (i != a)
 			{
 				printf(" path: ");
-				renderPath(parent, v);
+				renderPath(parent, i);
 			}
 		}
 		else
@@ -197,9 +197,9 @@ void	displayShortestPaths(int *distance, int *parent, int a, int n)
 	}
 	// Affichage du tableau des pères
 	printf("Table: [");
-	for (int i = 0; i < n; i++)
+	for (i = 0; i < n; i++)
 	{
-		if (parent[i] != INT_MAX)
+		if (parent[i] != CHAR_MAX)
 			printf("%2d", parent[i]);
 		else
 			printf("∞");
@@ -210,7 +210,7 @@ void	displayShortestPaths(int *distance, int *parent, int a, int n)
 }
 
 // Affichage du graphe sur le terminal
-void	displayGraph(Graph *g)
+void	displayGraph(const Graph *g)
 {
 	if (! g) return;
 	Node *n;

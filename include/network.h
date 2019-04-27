@@ -13,15 +13,15 @@
 
 typedef struct s_RootingTable
 {
-	int *distance; // tableau des distances
-	int *parent; // tableau des pères
+	uint8_t *distance; // tableau des distances
+	int8_t *parent; // tableau des pères
 }	RootingTable;
 
 // Crée le réseau
 Graph*	createNetwork();
 
 // Crée la table de routage en calculant les chemins
-RootingTable*	createRootingTable(Graph *g);
+RootingTable*	createRootingTable(const Graph *g);
 
 // Libère la mémoire de la table de routage
 void	destroyRootingTable(RootingTable *r);

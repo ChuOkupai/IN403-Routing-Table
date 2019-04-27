@@ -1,12 +1,11 @@
 #include <stdlib.h>
-#include <string.h>
 #include <time.h>
 #include "error.h"
 #include "network.h"
 
 void initTier1(Graph *g)
 {
-	int i,j;
+	int i, j;
 	for (i = 0; i < T1_END; i++)
 		for (j = i + 1; j < T1_END; j++)
 			if (rand() % 4)
@@ -16,10 +15,9 @@ void initTier1(Graph *g)
 
 void initTier2(Graph *g)
 {
-	int d[20], i, j, k, n;
+	int d[20] = { 0 }, i, j, k, n;
 
 	//init sommet degré 2 Tier 2
-	memset(d, 0, sizeof(d));
 	for(i=0;i<20;i++) d[i] = 2;
 	
 	for (i = T2_START; i < T2_END; i++)
@@ -98,15 +96,15 @@ Graph*	createNetwork()
 }
 
 // Crée la table de routage en calculant les chemins
-RootingTable*	createRootingTable(Graph *g)
+RootingTable*	createRootingTable(const Graph *g)
 {
 	RootingTable *r;
 	
 	CHECK(r = (RootingTable*)malloc(SIZE * sizeof(RootingTable)));
 	for (int i = 0; i < SIZE; i++)
 	{
-		CHECK(r[i].distance = (int*)malloc(SIZE * sizeof(int)));
-		CHECK(r[i].parent = (int*)malloc(SIZE * sizeof(int)));
+		CHECK(r[i].distance = (uint8_t*)malloc(SIZE * sizeof(uint8_t)));
+		CHECK(r[i].parent = (int8_t*)malloc(SIZE * sizeof(int8_t)));
 		dijkstra(g, r[i].distance, r[i].parent, i);
 	}
 	return r;

@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O3 -Wall -Wextra -Werror -g
+CFLAGS=-Ofast -Wall -Wextra -Werror -g
 
 run: rooting-table.out
 	./$<

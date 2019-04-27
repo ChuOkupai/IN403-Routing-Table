@@ -3,7 +3,7 @@
 #include "minheap.h"
 
 // Crée un noeud
-MinHeapNode*	newMinHeapNode(int v, int distance)
+MinHeapNode*	newMinHeapNode(const int v, const int distance)
 {
 	MinHeapNode *n;
 	CHECK(n = (MinHeapNode*)malloc(sizeof(MinHeapNode)));
@@ -13,12 +13,12 @@ MinHeapNode*	newMinHeapNode(int v, int distance)
 }
 
 // Crée un tas min de taille n
-MinHeap*	newMinHeap(int capacity)
+MinHeap*	newMinHeap(const int capacity)
 {
 	MinHeap *h;
 	
 	CHECK(h = (MinHeap*)malloc(sizeof(MinHeap)));
-	CHECK(h->position = (int*)malloc(capacity * sizeof(int)));
+	CHECK(h->position = (uint8_t*)malloc(capacity * sizeof(uint8_t)));
 	h->size = 0;
 	h->capacity = capacity;
 	CHECK(h->tab = (MinHeapNode**)malloc(capacity * sizeof(MinHeapNode*)));
@@ -26,7 +26,7 @@ MinHeap*	newMinHeap(int capacity)
 }
 
 // Vérifie si le sommet v est dans le tas
-int	inMinHeap(MinHeap *h, int v)
+int	inMinHeap(MinHeap *h, const int v)
 {
 	return (h->position[v] < h->size) ? 1 : 0;
 }
@@ -41,7 +41,7 @@ void	swapMinHeapNode(MinHeapNode **a, MinHeapNode **b)
 	*b = c;
 }
 
-void	MinHeapify(MinHeap *h, int i)
+void	MinHeapify(MinHeap *h, const int i)
 {
 	int smallest, left, right;
 	
@@ -77,7 +77,7 @@ MinHeapNode*	extractMin(MinHeap *h)
 }
 
 // Diminue la priorité du sommet v
-void	decreaseKey(MinHeap *h, int v, int distance)
+void	decreaseKey(MinHeap* h, const int v, const int distance)
 {
 	int i, m;
 	
