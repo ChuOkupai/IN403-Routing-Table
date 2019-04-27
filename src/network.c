@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include <time.h>
 #include "error.h"
 #include "network.h"
@@ -80,50 +79,47 @@ void initTier3(Graph *g)
 		}
 }
 
+// Crée le réseau
 Graph*	createNetwork()
 {
-	Graph *g = newGraph(100);
+	Graph *g = NULL;
+	
 	srand(time(NULL));
-	initTier1(g);
-	initTier2(g);
-	initTier3(g);
+	// tant que le réseau n'est pas connexe
+	while (! depthFirstSearch(g))
+	{
+		destroyGraph(g);
+		g = newGraph(SIZE);
+		initTier1(g);
+		initTier2(g);
+		initTier3(g);
+	}
 	return g;
 }
 
-void search_vertex(Graph *g, int v, int *color, int *father)
+// Crée la table de routage en calculant les chemins
+RootingTable*	createRootingTable(Graph *g)
 {
-	color[v] = 1;
-	Node *n = g->tab[v];
-	while(n != NULL)
+	RootingTable *r;
+	
+	CHECK(r = (RootingTable*)malloc(SIZE * sizeof(RootingTable)));
+	for (int i = 0; i < SIZE; i++)
 	{
-		if(color[n->id] == 0)
-		{
-			father[n->id] = v;
-			search_vertex(g, n->id, color, father);
-		}
-		n = n->next;
+		CHECK(r[i].distance = (int*)malloc(SIZE * sizeof(int)));
+		CHECK(r[i].parent = (int*)malloc(SIZE * sizeof(int)));
+		dijkstra(g, r[i].distance, r[i].parent, i);
 	}
+	return r;
 }
 
-int depthFirstSearch(Graph *g)
+// Libère la mémoire de la table de routage
+void	destroyRootingTable(RootingTable *r)
 {
-	if(!g) return 0;
-	int i, hasFather = 1;
-	int *color, *father;
-	
-	CHECK(color = calloc(g->size, sizeof(int)));
-	CHECK(father = (int*)malloc(g->size*sizeof(int)));
-	for(i=0;i<g->size;i++)
-		father[i] = -1;
-	
-	for(i=0; i<g->size; i++)
-		if(color[i] == 0)
-			search_vertex(g,i,color,father);
-	
-	for(i=1;i<g->size && hasFather;i++)
-		if(father[i] == -1) hasFather = 0;
-	
-	free(color);
-	free(father);
-	return hasFather;
+	if (! r) return;
+	for (int i = 0; i < SIZE; i++)
+	{
+		free(r[i].distance);
+		free(r[i].parent);
+	}
+	free(r);
 }

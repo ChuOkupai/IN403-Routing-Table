@@ -25,8 +25,19 @@ int	linked(Graph *g, int a, int b);
 /// Le poids doit être supérieur à 0 !
 void	link(Graph *g, int a, int b, int weight);
 
+// Applique le parcours en profondeur pour vérifier la connexité du graphe
+/// Renvoie 1 si le graphe est connexe, 0 sinon
+int depthFirstSearch(Graph *g);
+
+// Calcul des distances à partir du sommet a via l'algorithme de Dijkstra
+/// Les résultats sont stockés dans distance et parent qui doivent être initialisés de taille g->size !
+void	dijkstra(Graph* g, int *distance, int *parent, int a);
+
+// Affiche le résultat de l'agorithme de Dijkstra
+void	displayShortestPaths(int *distance, int *parent, int a, int n);
+
 // Affichage du graphe sur le terminal
-void	drawGraph(Graph *g);
+void	displayGraph(Graph *g);
 
 // Libère la mémoire d'un graphe
 void	destroyGraph(Graph *g);

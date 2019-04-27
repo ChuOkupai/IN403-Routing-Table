@@ -1,14 +1,14 @@
 #include <stdlib.h>
-#include "minheap.h"
 #include "error.h"
+#include "minheap.h"
 
 // Crée un noeud
-MinHeapNode*	newMinHeapNode(int v, int d)
+MinHeapNode*	newMinHeapNode(int v, int distance)
 {
 	MinHeapNode *n;
 	CHECK(n = (MinHeapNode*)malloc(sizeof(MinHeapNode)));
 	n->v = v;
-	n->d = d;
+	n->distance = distance;
 	return n;
 }
 
@@ -48,9 +48,9 @@ void	MinHeapify(MinHeap *h, int i)
 	smallest = i;
 	left = 2 * i + 1;
 	right = 2 * i + 2;
-	if (left < h->size && h->tab[left]->d < h->tab[smallest]->d)
+	if (left < h->size && h->tab[left]->distance < h->tab[smallest]->distance)
 		smallest = left;
-	if (right < h->size && h->tab[right]->d < h->tab[smallest]->d)
+	if (right < h->size && h->tab[right]->distance < h->tab[smallest]->distance)
 		smallest = right;
 	if (smallest != i)
 	{
@@ -77,13 +77,13 @@ MinHeapNode*	extractMin(MinHeap *h)
 }
 
 // Diminue la priorité du sommet v
-void	decreaseKey(MinHeap *h, int v, int d)
+void	decreaseKey(MinHeap *h, int v, int distance)
 {
 	int i, m;
 	
 	i = h->position[v];
-	h->tab[i]->d = d;
-	while (i && h->tab[i]->d < h->tab[(m = (i - 1)/ 2)]->d)
+	h->tab[i]->distance = distance;
+	while (i && h->tab[i]->distance < h->tab[(m = (i - 1)/ 2)]->distance)
 	{
 		h->position[h->tab[i]->v] = m;
 		h->position[h->tab[m]->v] = i;

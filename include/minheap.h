@@ -1,12 +1,13 @@
 #ifndef _MINHEAP_H
 # define _MINHEAP_H
 
-// Tas min (utilisé avec l'algorithme de Dijkstra)
+// Implémentation d'un tas min
+/// Utilisé avec l'algorithme de Dijkstra
 
 typedef struct s_MinHeapNode 
 {
 	int v; // index du sommet
-	int d; // distance
+	int distance; // distance depuis la source
 }	MinHeapNode;
 
 typedef struct s_MinHeap 
@@ -18,7 +19,7 @@ typedef struct s_MinHeap
 }	MinHeap;
 
 // Crée un noeud
-MinHeapNode*	newMinHeapNode(int v, int d);
+MinHeapNode*	newMinHeapNode(int v, int distance);
 
 // Crée un tas min de taille n
 MinHeap*	newMinHeap(int capacity);
@@ -30,7 +31,7 @@ int	inMinHeap(MinHeap *h, int v);
 MinHeapNode*	extractMin(MinHeap* h);
 
 // Diminue la priorité du sommet v
-void	decreaseKey(MinHeap* h, int v, int d);
+void	decreaseKey(MinHeap* h, int v, int distance);
 
 // Libère la mémoire d'un tas min
 void	destroyMinHeap(MinHeap* h);

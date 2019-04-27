@@ -9,15 +9,21 @@
 #define T2_END 28
 #define T3_START T2_END
 #define T3_END 100
+#define SIZE T3_END
 
-typedef struct s_Path
+typedef struct s_RootingTable
 {
-	int *table; // la valeur du chemin
-	int size; // la taille du chemin
-}	Path;
+	int *distance; // tableau des distances
+	int *parent; // tableau des pères
+}	RootingTable;
 
+// Crée le réseau
 Graph*	createNetwork();
 
-int	depthFirstSearch(Graph *g);
+// Crée la table de routage en calculant les chemins
+RootingTable*	createRootingTable(Graph *g);
+
+// Libère la mémoire de la table de routage
+void	destroyRootingTable(RootingTable *r);
 
 #endif
