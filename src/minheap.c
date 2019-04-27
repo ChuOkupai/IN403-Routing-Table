@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "heap.h"
+#include "minheap.h"
 #include "error.h"
 
 // Crée un noeud
@@ -64,8 +64,6 @@ void	MinHeapify(MinHeap *h, int i)
 // Récupère le noeud minimum du tas
 MinHeapNode*	extractMin(MinHeap *h)
 {
-	if (! h->size)
-		return NULL;
 	MinHeapNode *root, *last;
 	
 	root = h->tab[0];
@@ -78,6 +76,7 @@ MinHeapNode*	extractMin(MinHeap *h)
 	return root;
 }
 
+// Diminue la priorité du sommet v
 void	decreaseKey(MinHeap *h, int v, int d)
 {
 	int i, m;
@@ -96,8 +95,6 @@ void	decreaseKey(MinHeap *h, int v, int d)
 // Libère la mémoire d'un tas min
 void	destroyMinHeap(MinHeap *h)
 {
-	if (! h)
-		return;
 	free(h->tab);
 	free(h->position);
 	free(h);

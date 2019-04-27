@@ -17,19 +17,22 @@ typedef struct s_Graph
 // Crée un graphe de taille n
 Graph*	newGraph(int n);
 
-// Vérifie si le lien du sommet a vers b existe, si oui renvoie son poids
+// Vérifie si l'arête du sommet a vers b existe
+/// Renvoie son poids si oui, 0 sinon
 int	linked(Graph *g, int a, int b);
 
-// Crée un lien du sommet a vers b (poids > 0 !)
+// Crée une arête du sommet a vers b
+/// Le poids doit être supérieur à 0 !
 void	link(Graph *g, int a, int b, int weight);
 
-// Affichage du graphe (sur le terminal)
+// Affichage du graphe sur le terminal
 void	drawGraph(Graph *g);
 
 // Libère la mémoire d'un graphe
 void	destroyGraph(Graph *g);
 
-// Création d'un lien entre 2 sommets
+// Création d'une arête entre 2 sommets
+/// Le poids doit être supérieur à 0 !
 #define LINK(g, a, b, w) ({link(g, a, b, w); link(g, b, a, w);})
 
 #endif

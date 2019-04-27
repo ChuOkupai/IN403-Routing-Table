@@ -1,5 +1,5 @@
-#ifndef _HEAP_H
-# define _HEAP_H
+#ifndef _MINHEAP_H
+# define _MINHEAP_H
 
 // Tas min (utilisé avec l'algorithme de Dijkstra)
 
@@ -29,7 +29,7 @@ int	inMinHeap(MinHeap *h, int v);
 // Récupère le noeud minimum du tas
 MinHeapNode*	extractMin(MinHeap* h);
 
-// Diminue la distance du sommet v
+// Diminue la priorité du sommet v
 void	decreaseKey(MinHeap* h, int v, int d);
 
 // Libère la mémoire d'un tas min

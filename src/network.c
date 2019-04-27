@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
+#include "error.h"
 #include "network.h"
 
 void initTier1(Graph *g)
@@ -36,7 +37,7 @@ void initTier2(Graph *g)
 			j++;
 		}
 		// Liaison au Tier 2
-		//NE MARCHE PAS DANS CERTAINS PETIT CAS
+		// NE MARCHE PAS DANS CERTAINS PETITS CAS
 		k = rand()%2 ? k+1 : k;
 		k -= d[i-T2_START];
 		
@@ -57,35 +58,26 @@ void initTier2(Graph *g)
 
 void initTier3(Graph *g)
 {
-	int d[72], i, j, n;
-	memset(d, 0, sizeof(d));
+	int i, j, n;
 	
+	// Liaison au Tier 2
 	for (i = T3_START; i < T3_END; i++)
-	{
-		// Liaison au Tier 2
-		j = 0;
-		while (j < 2)
+		for (j = 0; j < 2; j++)
 		{
-			n = rand() % (T2_END-T2_START) + T2_START;
-			if (linked(g, i, n))
-				continue;
+			do
+				n = rand() % (T2_END-T2_START) + T2_START;
+			while (linked(g, i, n));
 			LINK(g, i, n, rand() % 36 + 15);
-			j++;
 		}
-		
-		// Liaison au Tier 3
-		if(d[i-T3_START] == 0)
+	// Liaison au Tier 3
+	for (i = T3_START; i < T3_END; i++)
+		if (! g->tab[i]->next->next)
 		{
-			n = rand() % (T3_END-T3_START) + T3_START;
-			while(i == n || d[n-T3_START])
-			{
+			do
 				n = rand() % (T3_END-T3_START) + T3_START;
-			}
-			LINK(g,i,n,rand() % 36 + 15);
-			d[i-T3_START]++;
-			d[n-T3_START]++;
+			while (i == n || g->tab[n]->next->next);
+			LINK(g, i, n, rand() % 36 + 15);
 		}
-	}
 }
 
 Graph*	createNetwork()
@@ -98,15 +90,15 @@ Graph*	createNetwork()
 	return g;
 }
 
-void search_vertex(Graph *g, int s, int *color, int *father)
+void search_vertex(Graph *g, int v, int *color, int *father)
 {
-	color[s] = 1;
-	Node *n = g->tab[s];
+	color[v] = 1;
+	Node *n = g->tab[v];
 	while(n != NULL)
 	{
 		if(color[n->id] == 0)
 		{
-			father[n->id] = s;
+			father[n->id] = v;
 			search_vertex(g, n->id, color, father);
 		}
 		n = n->next;
@@ -117,20 +109,21 @@ int depthFirstSearch(Graph *g)
 {
 	if(!g) return 0;
 	int i, hasFather = 1;
-	int *color = calloc(g->size, sizeof(int));
-	int *father = (int*)malloc(g->size*sizeof(int));
+	int *color, *father;
+	
+	CHECK(color = calloc(g->size, sizeof(int)));
+	CHECK(father = (int*)malloc(g->size*sizeof(int)));
 	for(i=0;i<g->size;i++)
 		father[i] = -1;
 	
 	for(i=0; i<g->size; i++)
 		if(color[i] == 0)
 			search_vertex(g,i,color,father);
-
+	
 	for(i=1;i<g->size && hasFather;i++)
 		if(father[i] == -1) hasFather = 0;
-
+	
 	free(color);
 	free(father);
 	return hasFather;
 }
-

@@ -23,7 +23,8 @@ Graph*	newGraph(int n)
 	return g;
 }
 
-// Vérifie si le lien du sommet a vers b existe, si oui renvoie son poids
+// Vérifie si l'arête du sommet a vers b existe
+/// Renvoie son poids si oui, 0 sinon
 int	linked(Graph *g, int a, int b)
 {
 	Node *n = g->tab[a];
@@ -36,10 +37,11 @@ int	linked(Graph *g, int a, int b)
 	return w;
 }
 
-// Crée un lien du sommet a vers b (poids > 0 !)
+// Crée une arête du sommet a vers b
+/// Le poids doit être supérieur à 0 !
 void	link(Graph *g, int a, int b, int weight)
 {
-	if (! (g && weight))
+	if (weight < 1)
 		return;
 	Node *nnew, *ncurr, *nprev;
 	
@@ -57,7 +59,6 @@ void	link(Graph *g, int a, int b, int weight)
 		nnew->next = g->tab[a];
 		g->tab[a] = nnew;
 	}
-	
 	else
 	{
 		ncurr = nprev = g->tab[a];
@@ -71,7 +72,7 @@ void	link(Graph *g, int a, int b, int weight)
 	}
 }
 
-// Affichage du graphe (sur le terminal)
+// Affichage du graphe sur le terminal
 void	drawGraph(Graph *g)
 {
 	Node *n;

@@ -2,19 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
-#include "heap.h"
+#include "minheap.h"
 
 // QUELQUES TESTS
-
-// Juste pour simplifier la création
-#define A 0
-#define B 1
-#define C 2
-#define D 3
-#define E 4
-#define F 5
-#define G 6
-#define H 7
 
 // Affiche le chemin
 void	renderPath(int parent[], int v)
@@ -29,28 +19,30 @@ void	renderPath(int parent[], int v)
 // Affiche le résultat
 void	display(int dist[], int parent[], int a, int n)
 {
+	// Affichage des distances et chemins
 	printf("Distances from ");
 	if (a < 26) printf("%c", a + 'A');
 		else printf("(%d)", a);
-	printf(" to:\n");
+	printf(":\n");
 	for (int v = 0; v < n; v++)
 	{
 		if (v < 26) printf("%c", v + 'A');
 		else printf("(%d)", v);
 		printf(" → ");
-		if (dist[v] == INT_MAX)
+		if (dist[v] != INT_MAX)
 		{
-			printf("∞\n");
-			continue;
+			printf("%d", dist[v]);
+			if (v != a)
+			{
+				printf(" path: ");
+				renderPath(parent, v);
+			}
 		}
-		printf("%d", dist[v]);
-		if (v != a)
-		{
-			printf(", path: ");
-			renderPath(parent, v);
-		}
+		else
+			printf("∞");
 		putchar('\n');
 	}
+	// Affichage du tableau des pères
 	printf("Table: [");
 	for (int i = 0; i < n; i++)
 	{
@@ -78,14 +70,10 @@ void	dijkstra(Graph* g, int a)
 	for (v = 0; v < g->size; v++)
 	{
 		dist[v] = INT_MAX; // valeur infini
-		if (v != a)
-			h->tab[v] = newMinHeapNode(v, dist[v]);
+		h->tab[v] = newMinHeapNode(v, dist[v]);
 		h->position[v] = v;
 	}
-	// On définit la valeur du sommet de départ à 0
-	h->tab[a] = newMinHeapNode(a, dist[a]);
-	h->position[a] = a;
-	dist[a] = 0;
+	dist[a] = 0; // On définit la valeur du sommet de départ à 0
 	parent[a] = -1;
 	decreaseKey(h, a, dist[a]);
 	
@@ -114,28 +102,38 @@ void	dijkstra(Graph* g, int a)
 	
 	// Correction des chemins impossibles
 	for (v = 0; v < g->size; v++)
-	{
-		if (parent[v] >= g->size)
-			parent[v] = INT_MAX;
-	}
-	
+		if (dist[v] == INT_MAX)
+			parent[v] = INT_MAX; // reset valeur infini
 	// Affichage des distances (DEBUG)
 	display(dist, parent, a, g->size);
 }
 
-int main()
+// Juste pour simplifier la création des arêtes
+enum e_vertex
 {
-	Graph* g = newGraph(7);
-	
-	/*LINK(g, A, B, 1);
+	A,
+	B,
+	C,
+	D,
+	E,
+	F,
+	G
+};
+
+void	test1(Graph *g)
+{
+	LINK(g, A, B, 1);
 	LINK(g, A, C, 1);
 	LINK(g, B, C, 3);
 	LINK(g, B, F, 10);
 	LINK(g, C, D, 2);
 	LINK(g, C, E, 4);
 	LINK(g, D, F, 4);
-	LINK(g, E, F, 3);*/
-	
+	LINK(g, E, F, 3);
+}
+
+void	test2(Graph *g)
+{
 	LINK(g, A, B, 2);
 	LINK(g, A, E, 3);
 	LINK(g, B, C, 5);
@@ -146,8 +144,31 @@ int main()
 	LINK(g, D, E, 2);
 	LINK(g, D, F, 5);
 	LINK(g, E, F, 2);
+}
+
+void	test3(Graph *g)
+{
+	LINK(g, A, B, 1);
+	LINK(g, B, C, 2);
+	LINK(g, C, D, 3);
+	LINK(g, D, E, 4);
+	LINK(g, E, F, 5);
+	LINK(g, F, G, 6);
+	LINK(g, G, A, 7);
+}
+
+int main()
+{
+	int n = 7;
+	Graph *g = newGraph(n);
 	
-	dijkstra(g, 0);
+	test3(g);
+	for (int i = 0; i < n; i++)
+	{
+		dijkstra(g, i);
+		if (i + 1 < n)
+			putchar('\n');
+	}
 	destroyGraph(g);
 	return 0;
 }
