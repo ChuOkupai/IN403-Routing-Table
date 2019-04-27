@@ -29,3 +29,6 @@ debug: rooting-table.out
 
 run: rooting-table.out
 	./$<
+
+time: rooting-table.out
+	/usr/bin/time -v ./$<

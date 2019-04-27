@@ -8,7 +8,7 @@ void	display(int a, int b, int h)
 	printf(" ⇒ %d\n", h);
 }
 
-// calcul le hash
+// calcul le hash (pour la table de routage)
 /** IMPORTANT: a != b **/
 int	hash(int a, int b)
 {

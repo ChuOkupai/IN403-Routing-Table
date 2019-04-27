@@ -10,6 +10,12 @@
 #define T3_START T2_END
 #define T3_END 100
 
+typedef struct s_Path
+{
+	int *table; // la valeur du chemin
+	int size; // la taille du chemin
+}	Path;
+
 Graph*	createNetwork();
 
 int	depthFirstSearch(Graph *g);

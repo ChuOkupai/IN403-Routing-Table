@@ -3,13 +3,13 @@
 
 // Tas min (utilisé avec l'algorithme de Dijkstra)
 
-typedef struct MinHeapNode 
+typedef struct s_MinHeapNode 
 {
 	int v; // index du sommet
 	int d; // distance
 }	MinHeapNode;
 
-typedef struct MinHeap 
+typedef struct s_MinHeap 
 {
 	int size;
 	int capacity;

@@ -1,14 +1,14 @@
 #ifndef _GRAPH_H
 # define _GRAPH_H
 
-typedef struct node
+typedef struct s_Node
 {
 	int id;
 	int weight;
-	struct node *next;
+	struct s_Node *next;
 }	Node;
 
-typedef struct graph
+typedef struct s_Graph
 {
 	int size;
 	Node **tab;
@@ -17,10 +17,10 @@ typedef struct graph
 // Crée un graphe de taille n
 Graph*	newGraph(int n);
 
-// Vérifie si le lien du sommet a vers b existe
+// Vérifie si le lien du sommet a vers b existe, si oui renvoie son poids
 int	linked(Graph *g, int a, int b);
 
-// Crée un lien du sommet a vers b
+// Crée un lien du sommet a vers b (poids > 0 !)
 void	link(Graph *g, int a, int b, int weight);
 
 // Affichage du graphe (sur le terminal)
