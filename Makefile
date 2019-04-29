@@ -24,3 +24,7 @@ network.o: src/network.c include/error.h include/graph.h include/network.h
 
 rooting-table.out: src/main.c include/network.h minheap.o graph.o network.o
 	$(CC) $(CFLAGS) $< -o $@ -I./include minheap.o graph.o network.o
+
+# Pour installer les dépendances
+install:
+	sudo apt install gcc libcsfml-dev

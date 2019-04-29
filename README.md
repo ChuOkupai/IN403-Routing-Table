@@ -1,5 +1,7 @@
-# IN403-Rooting-Table
+# IN403 - Projet Tables de routage - UVSQ
 
-- Problème rencontré au niveau de createNetwork : la creation du Tier1 est ok
-	Mais pas les autres
-- le parcours en profondeur n'a pas été testé mais devrait être en principe bon ! 
+## Dépendances
+Pour se compiler et s'exécuter, le projet fait en C a besoin de gcc et CSFML. L'installation sous Linux peut se faire avec la commande :
+```shell
+make install
+```

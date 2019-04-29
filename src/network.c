@@ -35,6 +35,8 @@ void initTier2(Graph *g)
 		}
 		// Liaison au Tier 2
 		// NE MARCHE PAS DANS CERTAINS PETITS CAS
+		/// Il faut traiter tous les sommets quand tu ajoutes une arête pour corriger le tier 2
+		/// Donc 3 boucles, une pour chaque degré et la dernière tirage random
 		k = rand()%2 ? k+1 : k;
 		k -= d[i-T2_START];
 		
