@@ -52,6 +52,6 @@ void	destroyGraph(Graph *g);
 #define LINK(g, a, b, w) ({link(g, a, b, w); link(g, b, a, w);})
 
 // Supprime une arête entre 2 sommets
-#define UNLINK(g, a, b) ({rmlink(g, a, b, w); rmlink(g, b, a, w);})
+#define UNLINK(g, a, b) ({rmlink(g, a, b); rmlink(g, b, a);})
 
 #endif
