@@ -32,8 +32,6 @@ void initTier2(Graph *g)
 {
 	int d[20] = { 0 }, i, j, k, n;
 
-	//init sommet degré 2 Tier 2
-	for(i=0;i<20;i++) d[i] = 2;
 	
 	for (i = T2_START; i < T2_END; i++)
 	{
@@ -48,25 +46,63 @@ void initTier2(Graph *g)
 			LINK(g, i, n, rand() % 11 + 10);
 			j++;
 		}
-		// Liaison au Tier 2
-		// NE MARCHE PAS DANS CERTAINS PETITS CAS
-		/// Il faut traiter tous les sommets quand tu ajoutes une arête pour corriger le tier 2
-		/// Donc 3 boucles, une pour chaque degré et la dernière tirage random
-		k = rand()%2 ? k+1 : k;
-		k -= d[i-T2_START];
-		
-		j = 0;
-		while (j < k)
+	}
+	
+	//Liaison Tier 2 degré 1
+	for(i = T2_START; i < T2_END; i++)
+	{
+		if(d[i-T2_START] == 0)
 		{
-			n = rand() % (T2_END-T2_START) + T2_START;
-			if (i != n && d[n-T2_START] < 3 && d[i-T2_START] < 3 && !linked(g, i, n))
-			{
-				LINK(g, i, n, rand() % 11 + 10);
-				d[n-T2_START]++;
-				d[i-T2_START]++;
-				j++;
-			}
+			do
+				n = rand() % (T2_END-T2_START) + T2_START;
+			while (i == n || d[n-T2_START] > 0);
+			LINK(g, i, n, rand() % 11 + 10);
+			d[i-T2_START]++;
+			d[n-T2_START]++;
 		}
+	}
+	
+	//Liaison Tier 2 degré 2
+	int b,nblink = 0;
+	for(i = T2_START; i < T2_END; i++)
+	{
+		if(d[i-T2_START] == 1)
+		{
+			if(nblink == 9)
+			{
+				b = 0;
+				while(d[b] != 1 || b == i)
+				{
+					b++;
+				}
+				if(linked(g,i,b))
+				{
+					printf("RECUT i: %d\n", i);
+					recut(g,i,b);
+				}
+				else
+				{
+					if(!linked(g,b,i))
+					{
+						printf("%d PAS LINK : %d\n", i, b);
+						LINK(g,i,b,rand()%11 +10);
+					}
+				}
+				break;
+			}
+			do
+			{
+				n = rand() % (T2_END-T2_START) + T2_START;
+				printf("i: %d n: %d\n", i, n);
+			}
+			while (i == n || d[n-T2_START] > 1 || linked(g,i,n));
+			LINK(g, i, n, rand() % 11 + 10);
+			d[i-T2_START]++;
+			d[n-T2_START]++;
+			nblink++;
+		}
+		for(int j=0;j<20;j++)
+			printf("J%d : %d\n", j+T2_START, d[j]);
 	}
 }
 
