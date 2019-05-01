@@ -3,6 +3,21 @@
 #include "error.h"
 #include "network.h"
 
+// Création d'une arête entre 2 sommets
+/// Le poids doit être supérieur à 0 !
+void LINK(Graph *g, int a, int b, int w)
+{
+	link(g, a, b, w);
+	link(g, b, a, w);
+}
+
+// Supprime une arête entre 2 sommets
+void UNLINK(Graph *g, int a, int b)
+{
+	rmlink(g, a, b);
+	rmlink(g, b, a);
+}
+
 void initTier1(Graph *g)
 {
 	int i, j;
@@ -102,11 +117,11 @@ RootingTable*	createRootingTable(const Graph *g)
 {
 	RootingTable *r;
 	
-	CHECK(r = (RootingTable*)malloc(SIZE * sizeof(RootingTable)));
-	for (int i = 0; i < SIZE; i++)
+	CHECK(r = (RootingTable*)malloc(g->size * sizeof(RootingTable)));
+	for (int i = 0; i < g->size; i++)
 	{
-		CHECK(r[i].distance = (uint8_t*)malloc(SIZE * sizeof(uint8_t)));
-		CHECK(r[i].parent = (int8_t*)malloc(SIZE * sizeof(int8_t)));
+		CHECK(r[i].distance = (uint8_t*)malloc(g->size * sizeof(uint8_t)));
+		CHECK(r[i].parent = (int8_t*)malloc(g->size * sizeof(int8_t)));
 		dijkstra(g, r[i].distance, r[i].parent, i);
 	}
 	return r;

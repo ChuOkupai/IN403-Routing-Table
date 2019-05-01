@@ -47,11 +47,4 @@ void	displayGraph(const Graph *g);
 // Libère la mémoire d'un graphe
 void	destroyGraph(Graph *g);
 
-// Création d'une arête entre 2 sommets
-/// Le poids doit être supérieur à 0 !
-#define LINK(g, a, b, w) ({link(g, a, b, w); link(g, b, a, w);})
-
-// Supprime une arête entre 2 sommets
-#define UNLINK(g, a, b) ({rmlink(g, a, b); rmlink(g, b, a);})
-
 #endif
