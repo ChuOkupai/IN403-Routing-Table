@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{minted}
+\renewcommand*\contentsname{Sommaire}
+
+\title{Projet IN403 - Tables de routage}
+\author{DANKOU Mathis, DELORT Tristan et SOURSOU Adrien}
+\date{Mai 2019}
+
+\begin{document}
+\maketitle
+\tableofcontents\break
+\section{Implémentation}
+
+On a choisit d'utiliser le langage C afin de réaliser le projet. Pour la partie optionnelle graphique, nous utilisons la bibliothèque CSFML.
+
+\subsection{Découpage}
+La manipulation du graphe se trouve dans le fichier \textit{graph.c} \\
+Le réseau est géré dans fichier \textit{network.c}
+
+\subsection{Structures de données}
+Les structures de données utilisées pour le graphe sont la structure \textit{Node} et \textit{Graph}. \\
+\par La structure \textit{Node} est donc définie par le numéro du sommet voisin, le poids correspondant aux temps de communication \textit{Node} ainsi qu'un pointeur vers le \textit{Node} voisin suivant.
+\begin{minted}{C}
+typedef struct s_Node
+{
+    uint8_t id;
+    uint8_t weight;
+    struct node *next;
+}   Node;
+\end{minted}
+
+\textit{Graph} est définie par sa taille \textit{size} (le nombre de noeud qu'il possède) et un tableau de listes chaînées de \textit{Node}. Ce tableau sert à enregistrer la liste des successeurs du noeud n à l'indice i du tableau ainsi que le temps de communication vers ces noeuds.
+
+\begin{minted}{C}
+typedef struct s_Graph
+{
+    uint8_t size;
+    Node **tab;
+}   Graph;
+\end{minted}
+
+La liste chaînée a été privilégiée en particulier pour son gain de place par rapport à la matrice d'adjacence. Cette dernière nous aurait forcée à enregistrer un très nombre d'informations inutiles puisque 72 \% des noeuds ne feront que 3 connections.
+
+\subsection{Dijkstra}
+L'implémentation de l'algorithme de Dijkstra a été réalisée avec un tas binaire pour obtenir une complexité logarithmique.
+Le tas binaire est stocké sous forme de tableau et est utilisé comme une file de priorité.
+
+\subsection{Affichage}
+Partie pour Tristan
+% Ajout explication implémentation de l'affichage %
+
+\break\section{Utilisation}
+Cette partie regroupe les directives de compilation et d'exécution du programme
+\subsection{Dépendances}
+Le projet a besoin de gcc et CSFML sous Linux pour fonctionner. Ces dépendances peuvent être installées à partir de la commande :
+\begin{minted}{bash}
+make install
+\end{minted}
+
+\subsection{Compilation}
+Le programme se compile via la commande :
+\begin{minted}{bash}
+make rooting-table.out
+\end{minted}
+
+\subsection{Exécution}
+Le programme s'exécute via la commande :
+\begin{minted}{bash}
+make
+\end{minted}
+ou
+\begin{minted}{bash}
+make run
+\end{minted}
+
+\subsection{Comportement du programme}
+Le programme génère le réseau tant qu'il n'est pas connexe (en appliquant l'agorithme du parcours en profondeur), puis calcule la table de routage du réseau. Enfin, l'utilisateur choisit son noeud de départ et d'arrivée afin d'obtenir le cheminement de son message, qui s'affiche à l'écran.
+
+\end{document}
