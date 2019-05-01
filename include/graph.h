@@ -27,6 +27,9 @@ int8_t	linked(Graph *g, const int a, const int b);
 /// Le poids doit être supérieur à 0 !
 void	link(Graph *g, const int a, const int b, const int weight);
 
+// Supprime une arête du sommet a vers b
+void	rmlink(Graph *g, const int a, const int b);
+
 // Applique le parcours en profondeur pour vérifier la connexité du graphe
 /// Renvoie 1 si le graphe est connexe, 0 sinon
 int8_t depthFirstSearch(const Graph *g);
@@ -47,5 +50,8 @@ void	destroyGraph(Graph *g);
 // Création d'une arête entre 2 sommets
 /// Le poids doit être supérieur à 0 !
 #define LINK(g, a, b, w) ({link(g, a, b, w); link(g, b, a, w);})
+
+// Supprime une arête entre 2 sommets
+#define UNLINK(g, a, b) ({rmlink(g, a, b, w); rmlink(g, b, a, w);})
 
 #endif

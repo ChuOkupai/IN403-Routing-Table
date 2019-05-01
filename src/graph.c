@@ -69,6 +69,25 @@ void	link(Graph *g, const int a, const int b, const int weight)
 	}
 }
 
+// Supprime une arête du sommet a vers b
+void	rmlink(Graph *g, const int a, const int b)
+{
+	if (! (g && linked(g, a, b)))
+		return;
+	Node *n = g->tab[a], *prev = NULL;
+	
+	while (n->id != b)
+	{
+		prev = n;
+		n = n->next;
+	}
+	if (! prev)
+		g->tab[a] = n->next;
+	else
+		prev->next = n->next;
+	free(n);
+}
+
 // Recherche un sommet
 /// Fonction utilitaire pour le parcours en profondeur
 void searchVertex(const Graph *g, const int v, int *color, int *father)
