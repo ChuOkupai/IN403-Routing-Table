@@ -18,6 +18,21 @@ void UNLINK(Graph *g, int a, int b)
 	rmlink(g, b, a);
 }
 
+void recut(Graph *g, const int a, const int b)
+{
+	int c,d;
+	do
+		c = rand() % (T2_END-T2_START) + T2_START;
+	while (a == c || b == c || linked(g,a,c));
+	Node *n = g->tab[a];
+	while(n->id < T2_START)
+		n = n->next;
+	d = n->id; 
+	UNLINK(g,c,d);
+	LINK(g,a,c,rand()%11+10);
+	LINK(g,b,d,rand()%11+10);
+}
+
 void initTier1(Graph *g)
 {
 	int i, j;
