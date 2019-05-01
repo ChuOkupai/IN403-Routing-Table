@@ -18,7 +18,7 @@ int main()
 	int *c = NULL; // 1 si c[i] doit etre coloré
 	int **l = NULL;
 	int clic[2] = {0}; //indices des nodes cliqués
-	int nbClics = 0, i, j;
+	int update = 1, nbClics = 0, i, j;
 	
 	g = createNetwork();
 	r = createRootingTable(g);
@@ -54,7 +54,6 @@ int main()
 	if(!window)
 		exit(EXIT_FAILURE);
 	
-	
 	//Main loop
 	force_directed(window,g,ptab,c,l);
 	while(sfRenderWindow_isOpen(window))
@@ -64,7 +63,6 @@ int main()
 		{
 			if(event.type == sfEvtClosed)
 				sfRenderWindow_close(window);
-
 			if(event.type == sfEvtMouseButtonPressed)
 			{
 				if(nbClics == 0)
@@ -74,6 +72,7 @@ int main()
 					{
 						c[clic[0]] = 1;
 						nbClics++;
+						update = 1;
 					}
 					else
 						clic[0] = 0;
@@ -85,12 +84,12 @@ int main()
 					if(clic[1] != -1)
 					{
 						c[clic[1]] = 1;
-						
 						color_the_way(c,l,r[clic[0]].parent,clic[1]);
 						#if DEBUG
 							printf("Distance between node %d to %d = %d\n", clic[0], clic[1], r[clic[0]].distance[clic[1]]);
 						#endif
 						nbClics++;
+						update = 1;
 					}
 					else
 						clic[1] = 0;
@@ -105,17 +104,18 @@ int main()
 					}
 					clic[0] = clic[1] = 0;
 					nbClics = 0;
+					update = 1;
 				}
 			}
 		}
-		
-		sfRenderWindow_clear(window, sfBlack);
-		
-		displayGraph_sf(window,g,ptab,c,l);
-		
-		sfRenderWindow_display(window);
+		if (update) // pour optimiser les performances en évitant de mettre à jour l'affichage à chaque itération
+		{
+			sfRenderWindow_clear(window, sfBlack);
+			displayGraph_sf(window,g,ptab,c,l);
+			sfRenderWindow_display(window);
+			update = 0;
+		}
 	}
-	
 	sfRenderWindow_destroy(window);
 	//fin partie SFML
 	
