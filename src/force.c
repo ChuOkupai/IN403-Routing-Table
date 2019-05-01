@@ -9,7 +9,7 @@
 #include <SFML/Graphics.h>
 #include <SFML/System.h>
 
-//calcul la distance de A a B
+// Calcul la distance de A a B
 double distance(point_t A, point_t B)
 {	
 	int dx = B.x - A.x;
@@ -17,7 +17,7 @@ double distance(point_t A, point_t B)
 	return sqrt(dx*dx + dy*dy);
 }
 
-//Renvoi l'indice du Node cliqué
+// Renvoi l'indice du Node cliqué
 int node_clic(point_t *tab, int x, int y, int n)
 {
 	point_t clic = {x,y};
@@ -29,7 +29,7 @@ int node_clic(point_t *tab, int x, int y, int n)
 	return -1;
 }
 
-//Remplit le tableau des node a colorer si ils font parti du plus court chemin
+// Remplit le tableau des node a colorer si ils font parti du plus court chemin
 void color_the_way(int *c,int **l,const int8_t *parent,int b)
 {
 	if(!parent) return;
@@ -40,7 +40,7 @@ void color_the_way(int *c,int **l,const int8_t *parent,int b)
 	c[b] = 1;
 }
 
-//Calcul l'angle par rapport au nord
+// Calcul l'angle par rapport au nord
 double bearing_angle(point_t A, point_t B)
 {
 	int dx = B.x - A.x;
@@ -49,7 +49,7 @@ double bearing_angle(point_t A, point_t B)
 	return (deg >= 180 ? deg - 360 : deg);
 }
 
-//calcul la force de repulsion entre le node A et B
+// Calcul la force de repulsion entre le node A et B
 vect_t rep_force(point_t A, point_t B)
 {
 	double dist = distance(A,B);
@@ -63,7 +63,7 @@ vect_t rep_force(point_t A, point_t B)
 	return (vect_t){force,angle};
 }
 
-//calcul la force d'attraction entre le node A et B
+// Calcul la force d'attraction entre le node A et B
 vect_t att_force(point_t A, point_t B, double ressort)
 {
 	double dist = distance(A,B);
@@ -76,7 +76,7 @@ vect_t att_force(point_t A, point_t B, double ressort)
 	return (vect_t){force,angle};
 }
 
-//donne des coordonnées aleatoires a chaque node
+// Donne des coordonnées aleatoires a chaque node
 void randomize_points(point_t *tab, int n)
 {
 	for(int i = 0; i < n; i++)
@@ -86,14 +86,14 @@ void randomize_points(point_t *tab, int n)
 	}
 }
 
-//transforme les coordonnées circulaires en coordonnées carthesiennes
+// Transforme les coordonnées circulaires en coordonnées carthesiennes
 int get_force_x(vect_t A)
 { return (int)A.force*cos( (M_PI/180)*(90 - A.angle) ); }
 
 int get_force_y(vect_t A)
 { return (int)A.force*sin( (M_PI/180)*(90 - A.angle) ); }
 
-//ajoute deux vecteurs de force
+// Ajoute deux vecteurs de force
 vect_t force_add(vect_t A, vect_t B)
 {
 	point_t sum1,sum2,ret;
@@ -110,7 +110,7 @@ vect_t force_add(vect_t A, vect_t B)
 	return (vect_t){force,angle};
 }
 
-//Affiche le graphe
+// Affiche le graphe
 void displayGraph_sf(sfRenderWindow *window, Graph *g,point_t *tab,int *c,int **l)
 {
 	sfCircleShape *circle[g->size];
@@ -178,7 +178,7 @@ void displayGraph_sf(sfRenderWindow *window, Graph *g,point_t *tab,int *c,int **
 
 }
 
-//trouve les coordonnées max en x et y atteintes par des nodes du graph
+// Trouve les coordonnées max en x et y atteintes par des nodes du graph
 point_t coord_max(point_t *tab,int n)
 {
 	point_t max = {0,0};
@@ -191,7 +191,7 @@ point_t coord_max(point_t *tab,int n)
 	return max;
 }
 
-//trouve les coordonnées min en x et y atteintes par des nodes du graph
+// Trouve les coordonnées min en x et y atteintes par des nodes du graph
 point_t coord_min(point_t *tab,int n)
 {
 	point_t min = {UCHAR_MAX,UCHAR_MAX};

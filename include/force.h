@@ -19,16 +19,27 @@ typedef struct
 	double angle;
 } vect_t;
 
+// Calcul l'angle par rapport au nord
 double bearing_angle(point_t A, point_t B);
 
+// Donne des coordonnées aleatoires a chaque node
 void randomize_points(point_t *tab, int n);
 
+// Affiche le graphe
 void displayGraph_sf(sfRenderWindow *window, Graph *g,point_t *tab,int *c,int **l);
 
+/**
+ *	Algorithme d'affichage du Graph
+ *	Il calcul pour chaque node son vecteur de mouvement en fonction
+ *	des nodes voisins et des nodes reliés.
+ *	Il deplace ensuite chaque node et recommence jusqu'a ce que le graph se stabilise
+ */
 void force_directed(sfRenderWindow *window,Graph *g,point_t *ptab,int *c,int **l);
 
+// Renvoi l'indice du Node cliqué
 int node_clic(point_t *tab, int x, int y, int n);
 
+// Remplit le tableau des node a colorer si ils font parti du plus court chemin
 void color_the_way(int *c,int **l,const int8_t *parent,int b);
 
 #define ABS(x) ((x)<0?(-x):(x))
