@@ -9,7 +9,7 @@ check-time: rooting-table.out
 	/usr/bin/time -v ./$<
 
 clean:
-	rm -f *.o *.out
+	rm -f *.o *.out *.zip
 
 minheap.o: src/minheap.c include/error.h include/minheap.h
 	$(CC) $(CFLAGS) -c $< -o $@ -I./include
@@ -29,3 +29,11 @@ rooting-table.out: src/main.c include/network.h minheap.o graph.o network.o forc
 # Pour installer les dépendances
 install:
 	sudo apt install gcc libcsfml-dev
+
+zip: rendu.zip
+
+rendu.zip: include src Makefile rapport.pdf README.md
+	mkdir rendu
+	cp -r $^ rendu
+	zip -9 -r $@ rendu
+	rm -r rendu
