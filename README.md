@@ -5,3 +5,15 @@ Pour se compiler et s'exécuter, le projet fait en C a besoin de gcc et CSFML. L
 ```shell
 make install
 ```
+### Compilation :
+```shell
+make rooting-table.out
+```
+### Exécution :
+```shell
+make
+```
+ou
+```shell
+make run
+```
