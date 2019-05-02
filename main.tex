@@ -47,8 +47,11 @@ L'implémentation de l'algorithme de Dijkstra a été réalisée avec un tas bin
 Le tas binaire est stocké sous forme de tableau et est utilisé comme une file de priorité.
 
 \subsection{Affichage}
-Partie pour Tristan
-% Ajout explication implémentation de l'affichage %
+
+L'affichage est réalisé avec la bibliothèque graphique CSFML. La documentation est disponible sur le site de SFML en C++ ou en C dans le SDK de CSFML. Pour le placement des Node, nous avons opté pour un affichage \textit{force_directed} car l'affichage en plaçant les Node aléatoirement n'était pas assez lisible. 
+Pour l'algorithme \textit{force_directed}, le fonctionnement est très simple. Pour chaque Node on calcul la force totale causée par l'attraction des autres Node (Tels des Ressorts) et la force de répulsion (Comme des particules) et ,en supposant la masse des Node unitaire, on ajoute cette force a la vitesse du Node. La constante \textit{DAMPING} effectue un "frottement" pour que les Node s'immobilisent et une fois que le mouvement total est bas, le Graph est affiché.
+Les constantes pour modifier le comportement de l'algorithme se trouvent dans \textit{force.h} et l'implémentation de l'algorithme et de l'affichage se trouvent dans \textit{force.c}.
+\textit{K_COULOMB} pour la force de repulsion, \textit{K_HOOKE} pour la force d'attraction, \textit{DAMPING} pour le frottement, et \textit{SPRING_LEN} pour la longueure des ressorts.
 
 \break\section{Utilisation}
 Cette partie regroupe les directives de compilation et d'exécution du programme
