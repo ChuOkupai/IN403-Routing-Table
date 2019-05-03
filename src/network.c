@@ -86,41 +86,21 @@ void initTier2(Graph *g)
 			if(nblink == 9)
 			{
 				b = T2_START;
-				while(d[b-T2_START] != 1 || b == i)
-				{
-					b++;
-				}
-				printf("b: %d\n", b);
-				if(linked(g,i,b))
-				{
-					printf("RECUT i: %d\n", i);
-					recut(g,i,b);
-					d[i-T2_START]++;
-					d[b-T2_START]++;
-				}
-				
-				else
-				{
-					printf("%d PAS LINK : %d\n", i, b);
-					LINK(g,i,b,rand()%11 +10);
-					d[i-T2_START]++;
-					d[b-T2_START]++;
-				}
+				while(d[b-T2_START] != 1 || b == i) b++;
+				if(linked(g,i,b)) recut(g,i,b);
+				else{LINK(g,i,b,rand()%11 +10);}
+				d[i-T2_START]++;
+				d[b-T2_START]++;
 				break;
 			}
 			do
-			{
 				n = rand() % (T2_END-T2_START) + T2_START;
-				printf("i: %d n: %d\n", i, n);
-			}
 			while (i == n || d[n-T2_START] > 1 || linked(g,i,n));
 			LINK(g, i, n, rand() % 11 + 10);
 			d[i-T2_START]++;
 			d[n-T2_START]++;
 			nblink++;
 		}
-		for(int j=0;j<20;j++)
-			printf("J%d : %d\n", j+T2_START, d[j]);
 	}
 	
 	//Liaison Tier 2 degré 3
@@ -130,45 +110,26 @@ void initTier2(Graph *g)
 		if(d[i-T2_START] == 2 && rand()%2)
 		{
 			
-			if(nblink == 9) //mettre 8 plutot (?) 
+			if(nblink == 9)
 			{
 				b = T2_START;
-				while(d[b-T2_START] != 2 || b == i)
-				{
-					b++;
-				}
-				printf("b: %d\n", b);
-				if(linked(g,i,b))
-				{
-					printf("RECUT i: %d\n", i);
-					recut(g,i,b);
-				}
+				while(d[b-T2_START] != 2 || b == i) b++;
 				
-				else
-				{
-					printf("%d PAS LINK : %d\n", i, b);
-					LINK(g,i,b,rand()%11 +10);
-				}
+				if(linked(g,i,b)) recut(g,i,b);
+				else { LINK(g,i,b,rand()%11 +10);}
 				d[i-T2_START]++;
 				d[b-T2_START]++;
 				break;
 			}
 			do
-			{
 				n = rand() % (T2_END-T2_START) + T2_START;
-				printf("i: %d n: %d\n", i, n);
-			}
 			while (i == n || d[n-T2_START] > 2 || linked(g,i,n));
 			LINK(g, i, n, rand() % 11 + 10);
 			d[i-T2_START]++;
 			d[n-T2_START]++;
 			nblink++;
 		}
-		for(int j=0;j<20;j++)
-			printf("J%d : %d\n", j+T2_START, d[j]);
 	}
-	for(int j=0;j<20;j++)
-			printf("J%d : %d\n", j+T2_START, d[j]);
 }
 
 void initTier3(Graph *g)

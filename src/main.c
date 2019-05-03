@@ -42,8 +42,6 @@ int main()
 		displayShortestPaths(r[0].distance, r[0].parent, 0, g->size);
 	#endif
 	
-	printf("## Le graphe devient plus grand que l'ecran durant l'algorithme d'affichage\n Il sera redimensionne a la fin\n");
-	printf("Par contre, si le graphe s'en va tres vite c'est qu'il y a eu un probleme\n");
 	//partie SFML
 	sfVideoMode mode = {SCREEN_X,SCREEN_Y,32};
 	sfRenderWindow* window;
