@@ -24,7 +24,7 @@ void recut(Graph *g, const int a, const int b)
 	do
 		c = rand() % (T2_END-T2_START) + T2_START;
 	while (a == c || b == c || linked(g,a,c) || linked(g,b,c));
-	Node *n = g->tab[a];
+	Node *n = g->tab[c];
 	while(n->id < T2_START)
 		n = n->next;
 	d = n->id;
@@ -114,6 +114,51 @@ void initTier2(Graph *g)
 				printf("i: %d n: %d\n", i, n);
 			}
 			while (i == n || d[n-T2_START] > 1 || linked(g,i,n));
+			LINK(g, i, n, rand() % 11 + 10);
+			d[i-T2_START]++;
+			d[n-T2_START]++;
+			nblink++;
+		}
+		for(int j=0;j<20;j++)
+			printf("J%d : %d\n", j+T2_START, d[j]);
+	}
+	
+	//Liaison Tier 2 degré 3
+	nblink = 0;
+	for(i = T2_START; i < T2_END; i++)
+	{
+		if(d[i-T2_START] == 2 && rand()%2)
+		{
+			
+			if(nblink == 9) //mettre 8 plutot (?) 
+			{
+				b = T2_START;
+				while(d[b-T2_START] != 2 || b == i)
+				{
+					b++;
+				}
+				printf("b: %d\n", b);
+				if(linked(g,i,b))
+				{
+					printf("RECUT i: %d\n", i);
+					recut(g,i,b);
+				}
+				
+				else
+				{
+					printf("%d PAS LINK : %d\n", i, b);
+					LINK(g,i,b,rand()%11 +10);
+				}
+				d[i-T2_START]++;
+				d[b-T2_START]++;
+				break;
+			}
+			do
+			{
+				n = rand() % (T2_END-T2_START) + T2_START;
+				printf("i: %d n: %d\n", i, n);
+			}
+			while (i == n || d[n-T2_START] > 2 || linked(g,i,n));
 			LINK(g, i, n, rand() % 11 + 10);
 			d[i-T2_START]++;
 			d[n-T2_START]++;
