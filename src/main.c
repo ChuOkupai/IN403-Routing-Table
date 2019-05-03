@@ -6,10 +6,6 @@
 #include "force.h"
 #include "network.h"
 
-// Gestion du debug
-/// activé si valeur non nulle
-#define DEBUG 1
-
 int main()
 {
 	Graph *g;
@@ -36,11 +32,7 @@ int main()
 		c[i] = 0;
 	}
 	
-	#if DEBUG
-		displayGraph(g);
-		// Affichage des chemins possibles pour le premier noeud
-		displayShortestPaths(r[0].distance, r[0].parent, 0, g->size);
-	#endif
+	displayGraph(g);
 	
 	//partie SFML
 	sfVideoMode mode = {SCREEN_X,SCREEN_Y,32};
