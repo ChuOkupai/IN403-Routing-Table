@@ -75,9 +75,7 @@ int main()
 					{
 						c[clic[1]] = 1;
 						color_the_way(c,l,r[clic[0]].parent,clic[1]);
-						#if DEBUG
-							printf("Distance between node %d to %d = %d\n", clic[0], clic[1], r[clic[0]].distance[clic[1]]);
-						#endif
+						printf("Distance between node %d to %d = %d\n", clic[0], clic[1], r[clic[0]].distance[clic[1]]);
 						nbClics++;
 						update = 1;
 					}
