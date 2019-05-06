@@ -2,10 +2,10 @@ CC=gcc
 CFLAGS=-Ofast -Wall -Wextra -Werror -g
 SFLAGS=-lcsfml-graphics -lcsfml-window -lcsfml-system
 
-run: rooting-table.out
+run: routing-table.out
 	./$<
 
-check-time: rooting-table.out
+check-time: routing-table.out
 	/usr/bin/time -v ./$<
 
 clean:
@@ -23,7 +23,7 @@ network.o: src/network.c include/error.h include/graph.h include/network.h
 force.o: src/force.c include/force.h include/graph.h include/network.h
 	$(CC) $(CFLAGS) -c $< -o $@ -I./include
 
-rooting-table.out: src/main.c include/network.h minheap.o graph.o network.o force.o
+routing-table.out: src/main.c include/network.h minheap.o graph.o network.o force.o
 	$(CC) $(CFLAGS) $< -o $@ -I./include minheap.o graph.o network.o force.o $(SFLAGS) -lm
 
 # Pour installer les dépendances
