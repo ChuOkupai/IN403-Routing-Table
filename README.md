@@ -7,7 +7,7 @@ make install
 ```
 ### Compilation :
 ```shell
-make rooting-table.out
+make routing-table.out
 ```
 ### Exécution :
 ```shell
